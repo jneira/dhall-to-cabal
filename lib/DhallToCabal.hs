@@ -497,31 +497,8 @@ sourceRepo =
                    <*> keyValue "module" ( Dhall.maybe Dhall.string )
                    <*> keyValue "branch" ( Dhall.maybe Dhall.string )
                    <*> keyValue "tag" ( Dhall.maybe Dhall.string )
+                   <*> keyValue "repoCommit" ( Dhall.maybe Dhall.string )
                    <*> keyValue "subdir" ( Dhall.maybe filePath )
-  -- makeRecord $ do
-  --   repoKind <-
-  --     keyValue "kind" repoKind
-
-  --   repoType <-
-  --     keyValue "type" ( Dhall.maybe repoType )
-
-  --   repoLocation <-
-  --     keyValue "location" ( Dhall.maybe Dhall.string )
-
-  --   repoModule <-
-  --     keyValue "module" ( Dhall.maybe Dhall.string )
-
-  --   repoBranch <-
-  --     keyValue "branch" ( Dhall.maybe Dhall.string )
-
-  --   repoTag <-
-  --     keyValue "tag" ( Dhall.maybe Dhall.string )
-
-  --   repoSubdir <-
-  --     keyValue "subdir" ( Dhall.maybe filePath )
-
-  --   pure Cabal.SourceRepo { .. }
-
 
 
 repoKind :: Dhall.Type Cabal.RepoKind
@@ -761,14 +738,9 @@ repoType =
 
 legacyExeDependency :: Dhall.Type Cabal.LegacyExeDependency
 legacyExeDependency =
-  makeRecord $ do
-    exe <-
-      keyValue "exe" Dhall.string
-
-    version <-
-      keyValue "version" versionRange
-
-    pure ( Cabal.LegacyExeDependency exe version )
+  makeRecord $
+  Cabal.LegacyExeDependency <$> keyValue "exe" Dhall.string
+                            <*> keyValue "version" versionRange
 
 
 
