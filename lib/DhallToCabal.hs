@@ -1,4 +1,3 @@
-{-# language ApplicativeDo #-}
 {-# language FlexibleContexts #-}
 {-# language FlexibleInstances #-}
 {-# language GADTs #-}
@@ -41,7 +40,6 @@ import Data.List ( partition )
 import Data.Maybe ( fromMaybe )
 import Data.Monoid ( (<>) )
 import Formatting.Buildable ( Buildable(..) )
-import Text.Trifecta.Delta ( Delta(..) )
 
 import qualified Data.ByteString.Lazy as LazyByteString
 import qualified Data.HashMap.Strict.InsOrd as Map
@@ -64,7 +62,7 @@ import qualified Distribution.Text as Cabal ( simpleParse )
 import qualified Distribution.Types.CondTree as Cabal
 import qualified Distribution.Types.Dependency as Cabal
 import qualified Distribution.Types.ExeDependency as Cabal
-import qualified Distribution.Types.ExecutableScope as Cabal
+import qualified Distribution.Types.Executable as Cabal
 import qualified Distribution.Types.ForeignLib as Cabal
 import qualified Distribution.Types.ForeignLibOption as Cabal
 import qualified Distribution.Types.ForeignLibType as Cabal
@@ -419,9 +417,6 @@ executable =
     modulePath <-
       keyValue "main-is" Dhall.string
 
-    exeScope <-
-      keyValue "scope" executableScope
-
     buildInfo <-
       buildInfo
 
@@ -495,29 +490,37 @@ library =
 
 sourceRepo :: Dhall.Type Cabal.SourceRepo
 sourceRepo =
-  makeRecord $ do
-    repoKind <-
-      keyValue "kind" repoKind
+  makeRecord $
+  Cabal.SourceRepo <$> keyValue "kind" repoKind
+                   <*> keyValue "type" ( Dhall.maybe repoType )
+                   <*> keyValue "location" ( Dhall.maybe Dhall.string )
+                   <*> keyValue "module" ( Dhall.maybe Dhall.string )
+                   <*> keyValue "branch" ( Dhall.maybe Dhall.string )
+                   <*> keyValue "tag" ( Dhall.maybe Dhall.string )
+                   <*> keyValue "subdir" ( Dhall.maybe filePath )
+  -- makeRecord $ do
+  --   repoKind <-
+  --     keyValue "kind" repoKind
 
-    repoType <-
-      keyValue "type" ( Dhall.maybe repoType )
+  --   repoType <-
+  --     keyValue "type" ( Dhall.maybe repoType )
 
-    repoLocation <-
-      keyValue "location" ( Dhall.maybe Dhall.string )
+  --   repoLocation <-
+  --     keyValue "location" ( Dhall.maybe Dhall.string )
 
-    repoModule <-
-      keyValue "module" ( Dhall.maybe Dhall.string )
+  --   repoModule <-
+  --     keyValue "module" ( Dhall.maybe Dhall.string )
 
-    repoBranch <-
-      keyValue "branch" ( Dhall.maybe Dhall.string )
+  --   repoBranch <-
+  --     keyValue "branch" ( Dhall.maybe Dhall.string )
 
-    repoTag <-
-      keyValue "tag" ( Dhall.maybe Dhall.string )
+  --   repoTag <-
+  --     keyValue "tag" ( Dhall.maybe Dhall.string )
 
-    repoSubdir <-
-      keyValue "subdir" ( Dhall.maybe filePath )
+  --   repoSubdir <-
+  --     keyValue "subdir" ( Dhall.maybe filePath )
 
-    pure Cabal.SourceRepo { .. }
+  --   pure Cabal.SourceRepo { .. }
 
 
 
@@ -554,12 +557,9 @@ dhallToCabal fileName source =
 
 input :: FilePath -> LazyText.Text -> Dhall.Type a -> IO a
 input fileName source t = do
-  let
-    delta =
-      Directed ( StrictText.encodeUtf8 ( StrictText.pack fileName ) ) 0 0 0 0
 
   expr  <-
-    throws ( Dhall.Parser.exprFromText delta source )
+    throws ( Dhall.Parser.exprFromText fileName source )
 
   expr' <-
     Dhall.Import.load expr
@@ -569,8 +569,6 @@ input fileName source t = do
       Dhall.expected t
         & build
         & Builder.toLazyText
-        & LazyText.encodeUtf8
-        & LazyByteString.toStrict
 
   let
     annot =
@@ -835,17 +833,6 @@ pkgconfigDependency =
 pkgconfigName :: Dhall.Type Cabal.PkgconfigName
 pkgconfigName =
   Cabal.mkPkgconfigName <$> Dhall.string
-
-
-
-executableScope :: Dhall.Type Cabal.ExecutableScope
-executableScope =
-  makeUnion
-    ( Map.fromList
-        [ ( "Public", Cabal.ExecutablePublic <$ Dhall.unit )
-        , ( "Private", Cabal.ExecutablePrivate <$ Dhall.unit )
-        ]
-    )
 
 
 
@@ -1169,21 +1156,11 @@ arch =
 
 
 flag :: Dhall.Type Cabal.Flag
-flag =
-  makeRecord $ do
-    flagName <-
-      keyValue "name" flagName
-
-    flagDefault <-
-      keyValue "default" Dhall.bool
-
-    flagDescription <-
-      keyValue "description" Dhall.string
-
-    flagManual <-
-      keyValue "manual" Dhall.bool
-
-    return Cabal.MkFlag { .. }
+flag = makeRecord $
+       Cabal.MkFlag <$> keyValue "name" flagName
+                    <*> keyValue "description" Dhall.string
+                    <*> keyValue "default" Dhall.bool
+                    <*> keyValue "manual" Dhall.bool
 
 
 
@@ -1227,15 +1204,9 @@ mixin =
 
 includeRenaming :: Dhall.Type Cabal.IncludeRenaming
 includeRenaming =
-  makeRecord $ do
-    includeProvidesRn <-
-      keyValue "provides" moduleRenaming
-
-    includeRequiresRn <-
-      keyValue "requires" moduleRenaming
-
-    pure Cabal.IncludeRenaming { .. }
-
+  makeRecord $
+  Cabal.IncludeRenaming <$> keyValue "provides" moduleRenaming
+                        <*> keyValue "requires" moduleRenaming
 
 
 moduleRenaming :: Dhall.Type Cabal.ModuleRenaming

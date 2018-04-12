@@ -7,7 +7,7 @@ module DhallToCabal.Diff ( Diffable(..) ) where
 import Data.List ( (\\), intersect )
 
 import qualified Distribution.PackageDescription as Cabal
-import qualified Distribution.Types.ExecutableScope as Cabal
+import qualified Distribution.Types.Executable as Cabal
 import qualified Distribution.Types.ForeignLib as Cabal
 import qualified Distribution.Types.ForeignLibType as Cabal
 import qualified Distribution.Types.UnqualComponentName as Cabal
@@ -142,15 +142,6 @@ instance Diffable Cabal.ForeignLibType where
 
 
 instance Diffable Cabal.TestSuiteInterface where
-  diff left right =
-    if left == right then
-      ( left, mempty, mempty )
-    else
-      ( mempty, left, right )
-
-
-
-instance Diffable Cabal.ExecutableScope where
   diff left right =
     if left == right then
       ( left, mempty, mempty )

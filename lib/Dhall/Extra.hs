@@ -1,4 +1,3 @@
-{-# language ApplicativeDo #-}
 {-# language GADTs #-}
 {-# language GeneralizedNewtypeDeriving #-}
 {-# language LambdaCase #-}
