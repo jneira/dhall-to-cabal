@@ -33,7 +33,6 @@ module DhallToCabal
 
   , sortExpr
   ) where
-
 import Control.Exception ( Exception, throwIO )
 import Data.Function ( (&) )
 import Data.List ( partition )
@@ -87,126 +86,57 @@ import DhallToCabal.Diff ( Diffable(..)  )
 
 
 packageIdentifier :: RecordBuilder Cabal.PackageIdentifier
-packageIdentifier = do
-  pkgName <-
-    keyValue "name" packageName
-
-  pkgVersion <-
-    keyValue "version" version
-
-  pure Cabal.PackageIdentifier { .. }
+packageIdentifier =
+  Cabal.PackageIdentifier <$> keyValue "name" packageName
+                          <*> keyValue "version" version
 
 
 
 packageName :: Dhall.Type Cabal.PackageName
-packageName =
-  Cabal.mkPackageName <$> Dhall.string
+packageName = Cabal.mkPackageName <$> Dhall.string
 
 
 
 packageDescription :: RecordBuilder Cabal.PackageDescription
-packageDescription = do
-  package <-
-    packageIdentifier
-
-  benchmarks <-
-    pure []
-
-  testSuites <-
-    pure []
-
-  executables <-
-    pure []
-
-  foreignLibs <-
-    pure []
-
-  subLibraries <-
-    pure []
-
-  library <-
-    pure Nothing
-
-  customFieldsPD <-
-    keyValue
-      "x-fields"
+packageDescription =
+  Cabal.PackageDescription
+  <$> packageIdentifier
+  <*> keyValue "license" license
+  <*> keyValue "license-files" ( Dhall.list Dhall.string )
+  <*> keyValue "copyright" Dhall.string
+  <*> keyValue "maintainer" Dhall.string
+  <*> keyValue "author" Dhall.string
+  <*> keyValue "stability" Dhall.string
+  <*> keyValue "tested-with" ( Dhall.list compiler )
+  <*> keyValue "homepage" Dhall.string
+  <*> keyValue "package-url" Dhall.string
+  <*> keyValue "bug-reports" Dhall.string
+  <*> keyValue "source-repos" ( Dhall.list sourceRepo )
+  <*> keyValue "synopsis" Dhall.string
+  <*> keyValue "description" Dhall.string
+  <*> keyValue "ctaegory" Dhall.string
+  <*> keyValue "x-fields"
       ( Dhall.list ( Dhall.pair Dhall.string Dhall.string ) )
-
-  sourceRepos <-
-    keyValue "source-repos" ( Dhall.list sourceRepo )
-
-  specVersionRaw <-
-    Left <$> keyValue "cabal-version" version
-
-  buildType <-
-    keyValue "build-type" ( Dhall.maybe buildType )
-
-  license <-
-    keyValue "license" license
-
-  licenseFiles <-
-    keyValue "license-files" ( Dhall.list Dhall.string )
-
-  copyright <-
-    keyValue "copyright" Dhall.string
-
-  maintainer <-
-    keyValue "maintainer" Dhall.string
-
-  author <-
-    keyValue "author" Dhall.string
-
-  stability <-
-    keyValue "stability" Dhall.string
-
-  testedWith <-
-    keyValue "tested-with" ( Dhall.list compiler )
-
-  homepage <-
-    keyValue "homepage" Dhall.string
-
-  pkgUrl <-
-    keyValue "package-url" Dhall.string
-
-  bugReports <-
-    keyValue "bug-reports" Dhall.string
-
-  synopsis <-
-    keyValue "synopsis" Dhall.string
-
-  description <-
-    keyValue "description" Dhall.string
-
-  category <-
-    keyValue "category" Dhall.string
-
-  -- Cabal documentation states
+    -- Cabal documentation states
   --
   --   > YOU PROBABLY DON'T WANT TO USE THIS FIELD.
   --
   -- So I guess we won't use this field.
-  buildDepends <-
-    pure []
-
-  setupBuildInfo <-
-    keyValue "custom-setup" ( Dhall.maybe setupBuildInfo )
-
-  dataFiles <-
-    keyValue "data-files" ( Dhall.list Dhall.string )
-
-  dataDir <-
-    keyValue "data-dir" Dhall.string
-
-  extraSrcFiles <-
-    keyValue "extra-source-files" ( Dhall.list Dhall.string )
-
-  extraTmpFiles <-
-    keyValue "extra-tmp-files" ( Dhall.list Dhall.string )
-
-  extraDocFiles <-
-    keyValue "extra-doc-files" ( Dhall.list Dhall.string )
-
-  return Cabal.PackageDescription { .. }
+  <*> pure [] -- buildDepends
+  <*> (Left <$> keyValue "cabal-version" version)
+  <*> keyValue "build-type" ( Dhall.maybe buildType )
+  <*> keyValue "custom-setup" ( Dhall.maybe setupBuildInfo )
+  <*> pure Nothing -- library
+  <*> pure [] -- subLibraries
+  <*> pure [] -- executables
+  <*> pure [] -- foreignLibs
+  <*> pure [] -- testSuites
+  <*> pure [] -- benchmarks
+  <*> keyValue "data-files" ( Dhall.list Dhall.string )
+  <*> keyValue "data-dir" Dhall.string
+  <*> keyValue "extra-source-files" ( Dhall.list Dhall.string )
+  <*> keyValue "extra-tmp-files" ( Dhall.list Dhall.string )
+  <*> keyValue "extra-doc-files" ( Dhall.list Dhall.string )
 
 
 
@@ -247,140 +177,64 @@ version =
 
 benchmark :: Dhall.Type Cabal.Benchmark
 benchmark =
-  makeRecord $ do
-    mainIs <-
-      keyValue "main-is" Dhall.string
-
-    benchmarkName <-
-      pure ""
-
-    benchmarkBuildInfo <-
-      buildInfo
-
-    pure
-      Cabal.Benchmark
-        { benchmarkInterface =
+  makeRecord $
+  (\ mainIs benchmarkName benchmarkBuildInfo ->
+    Cabal.Benchmark
+       { benchmarkInterface =
             Cabal.BenchmarkExeV10 ( Cabal.mkVersion [ 1, 0 ] ) mainIs
         , ..
-        }
+        }) <$> keyValue "main-is" Dhall.string
+           <*> pure "" <*> buildInfo
 
 
 
 buildInfo :: RecordBuilder Cabal.BuildInfo
-buildInfo = do
-  buildable <-
-    keyValue "buildable" Dhall.bool
-
-  buildTools <-
-    keyValue "build-tools" ( Dhall.list legacyExeDependency )
-
-  buildToolDepends <-
-    keyValue "build-tool-depends" ( Dhall.list exeDependency )
-
-  cppOptions <-
-    keyValue "cpp-options" ( Dhall.list Dhall.string )
-
-  ccOptions <-
-    keyValue "cc-options" ( Dhall.list Dhall.string )
-
-  ldOptions <-
-    keyValue "ld-options" ( Dhall.list Dhall.string )
-
-  pkgconfigDepends <-
-    keyValue "pkgconfig-depends" ( Dhall.list pkgconfigDependency )
-
-  frameworks <-
-    keyValue "frameworks" ( Dhall.list Dhall.string )
-
-  extraFrameworkDirs <-
-    keyValue "extra-framework-dirs" ( Dhall.list Dhall.string )
-
-  cSources <-
-    keyValue "c-sources" ( Dhall.list Dhall.string )
-
-  jsSources <-
-    keyValue "js-sources" ( Dhall.list Dhall.string )
-
-  hsSourceDirs <-
-    keyValue "hs-source-dirs" ( Dhall.list Dhall.string )
-
-  otherModules <-
-    keyValue "other-modules" ( Dhall.list moduleName )
-
-  autogenModules <-
-    keyValue "autogen-modules" ( Dhall.list moduleName )
-
-  defaultLanguage <-
-    keyValue "default-language" ( Dhall.maybe language )
-
-  otherLanguages <-
-    keyValue "other-languages" ( Dhall.list language )
-
-  defaultExtensions <-
-    keyValue "default-extensions" ( Dhall.list extension )
-
-  otherExtensions <-
-    keyValue "other-extensions" ( Dhall.list extension )
-
-  oldExtensions <-
-    pure []
-
-  extraLibs <-
-    keyValue "extra-libraries" ( Dhall.list Dhall.string )
-
-  extraGHCiLibs <-
-    keyValue "extra-ghci-libraries" ( Dhall.list Dhall.string )
-
-  extraLibDirs <-
-    keyValue "extra-lib-dirs" ( Dhall.list Dhall.string )
-
-  includeDirs <-
-    keyValue "include-dirs" ( Dhall.list Dhall.string )
-
-  includes <-
-    keyValue "includes" ( Dhall.list Dhall.string )
-
-  installIncludes <-
-    keyValue "install-includes" ( Dhall.list Dhall.string )
-
-  options <-
-    keyValue "compiler-options" compilerOptions
-
-  profOptions <-
-    keyValue "profiling-options" compilerOptions
-
-  sharedOptions <-
-    keyValue "shared-options" compilerOptions
-
-  customFieldsBI <-
-    pure []
-
-  targetBuildDepends <-
-    keyValue "build-depends" ( Dhall.list dependency )
-
-  mixins <-
-    keyValue "mixins" ( Dhall.list mixin )
-
-  return Cabal.BuildInfo { ..  }
+buildInfo = Cabal.BuildInfo
+  <$> keyValue "buildable" Dhall.bool
+  <*> keyValue "build-tools"
+      ( Dhall.list legacyExeDependency )
+  <*> keyValue "build-tool-depends"
+      ( Dhall.list exeDependency )
+  <*> keyValue "cpp-options" ( Dhall.list Dhall.string )
+  <*> keyValue "cc-options" ( Dhall.list Dhall.string )
+  <*> keyValue "ld-options" ( Dhall.list Dhall.string )
+  <*> keyValue "pkgconfig-depends"
+      ( Dhall.list pkgconfigDependency )
+  <*> keyValue "frameworks" ( Dhall.list Dhall.string )
+  <*> keyValue "extra-framework-dirs"
+      ( Dhall.list Dhall.string )
+  <*> keyValue "c-sources" ( Dhall.list Dhall.string )
+  <*> keyValue "js-sources" ( Dhall.list Dhall.string )
+  <*> keyValue "java-sources" ( Dhall.list Dhall.string )
+  <*> keyValue "hs-source-dirs" ( Dhall.list Dhall.string )
+  <*> keyValue "other-modules" ( Dhall.list moduleName )
+  <*> keyValue "autogen-modules" ( Dhall.list moduleName )
+  <*> keyValue "default-language" ( Dhall.maybe language )
+  <*> keyValue "other-languages" ( Dhall.list language )
+  <*> keyValue "default-extensions" ( Dhall.list extension )
+  <*> keyValue "other-extensions" ( Dhall.list extension )
+  <*> pure []  -- old-extensions
+  <*> keyValue "extra-libraries" ( Dhall.list Dhall.string )
+  <*> keyValue "extra-ghci-libraries"
+      ( Dhall.list Dhall.string )
+  <*> keyValue "extra-lib-dirs" ( Dhall.list Dhall.string )
+  <*> keyValue "include-dirs" ( Dhall.list Dhall.string )
+  <*> keyValue "includes" ( Dhall.list Dhall.string )
+  <*> keyValue "install-includes" ( Dhall.list Dhall.string )
+  <*> keyValue "compiler-options" compilerOptions
+  <*> keyValue "profiling-options" compilerOptions
+  <*> keyValue "shared-options" compilerOptions
+  <*> pure [] --  customFieldsBI
+  <*> keyValue "build-depends" ( Dhall.list dependency )
+  <*> keyValue "mixins" ( Dhall.list mixin )
 
 
 
 testSuite :: Dhall.Type Cabal.TestSuite
 testSuite =
-  makeRecord $ do
-    testName <-
-      pure ""
-
-    testBuildInfo <-
-      buildInfo
-
-    testInterface <-
-      keyValue "type" testSuiteInterface
-
-    pure
-      Cabal.TestSuite
-        { ..
-        }
+  makeRecord $
+  Cabal.TestSuite <$> pure "" <*> keyValue "type" testSuiteInterface
+                  <*> buildInfo
 
 
 
@@ -401,7 +255,6 @@ testSuiteInterface =
 
 
 
-
 unqualComponentName :: Dhall.Type Cabal.UnqualComponentName
 unqualComponentName =
   Cabal.mkUnqualComponentName <$> Dhall.string
@@ -410,45 +263,24 @@ unqualComponentName =
 
 executable :: Dhall.Type Cabal.Executable
 executable =
-  makeRecord $ do
-    exeName <-
-      pure ""
-
-    modulePath <-
-      keyValue "main-is" Dhall.string
-
-    buildInfo <-
-      buildInfo
-
-    pure Cabal.Executable { .. }
+  makeRecord $
+  Cabal.Executable <$> pure "" -- exeName
+                   <*> keyValue "main-is" Dhall.string
+                   <*> buildInfo
 
 
 
 foreignLib :: Dhall.Type Cabal.ForeignLib
 foreignLib =
-  makeRecord $ do
-    foreignLibName <-
-      pure ""
-
-    foreignLibType <-
-      keyValue "type" foreignLibType
-
-    foreignLibOptions <-
-      keyValue "options" ( Dhall.list foreignLibOption )
-
-    foreignLibBuildInfo <-
-      buildInfo
-
-    foreignLibVersionInfo <-
-      keyValue "lib-version-info" ( Dhall.maybe versionInfo )
-
-    foreignLibVersionLinux <-
-      keyValue "lib-version-linux" ( Dhall.maybe version )
-
-    foreignLibModDefFile <-
-      keyValue "mod-def-files" ( Dhall.list Dhall.string )
-
-    pure Cabal.ForeignLib { .. }
+  makeRecord $
+  Cabal.ForeignLib <$> pure "" -- foreignLibName
+                   <*> keyValue "type" foreignLibType
+                   <*> keyValue "options" ( Dhall.list foreignLibOption )
+                   <*> buildInfo
+                   <*> keyValue "lib-version-info"
+                       ( Dhall.maybe versionInfo )
+                   <*> keyValue "lib-version-linux" ( Dhall.maybe version )
+                   <*> keyValue "mod-def-files" ( Dhall.list Dhall.string )
 
 
 
@@ -465,26 +297,15 @@ foreignLibType =
 
 library :: Dhall.Type Cabal.Library
 library =
-  makeRecord $ do
-    libName <-
-      pure Nothing
-
-    libBuildInfo <-
-      buildInfo
-
-    exposedModules <-
-      keyValue "exposed-modules" ( Dhall.list moduleName )
-
-    reexportedModules <-
-      keyValue "reexported-modules" ( Dhall.list moduleReexport )
-
-    signatures <-
-      keyValue "signatures" ( Dhall.list moduleName )
-
-    libExposed <-
-      pure True
-
-    pure Cabal.Library { .. }
+  makeRecord $
+    Cabal.Library <$> pure Nothing -- libName
+                  <*> keyValue "exposed-modules"
+                      ( Dhall.list moduleName )
+                  <*> keyValue "reexported-modules"
+                      ( Dhall.list moduleReexport )
+                  <*> keyValue "signatures" ( Dhall.list moduleName )
+                  <*> pure True -- libExposed
+                  <*> buildInfo
 
 
 
@@ -509,14 +330,9 @@ repoKind =
 
 dependency :: Dhall.Type Cabal.Dependency
 dependency =
-  makeRecord $ do
-    packageName <-
-      keyValue "package" packageName
-
-    versionRange <-
-      keyValue "bounds" versionRange
-
-    pure ( Cabal.Dependency packageName versionRange )
+  makeRecord $
+  Cabal.Dependency <$> keyValue "package" packageName
+                   <*> keyValue "bounds" versionRange
 
 
 
@@ -768,18 +584,11 @@ compilerOptions =
 
 
 exeDependency :: Dhall.Type Cabal.ExeDependency
-exeDependency =
-  makeRecord $ do
-    packageName <-
-      keyValue "package" packageName
-
-    component <-
-      keyValue "component" unqualComponentName
-
-    version <-
-      keyValue "version" versionRange
-
-    pure ( Cabal.ExeDependency packageName component version )
+exeDependency = 
+  makeRecord $
+  Cabal.ExeDependency <$> keyValue "package" packageName
+                      <*> keyValue "component" unqualComponentName
+                      <*> keyValue "version" versionRange
 
 
 
@@ -791,14 +600,9 @@ language =
 
 pkgconfigDependency :: Dhall.Type Cabal.PkgconfigDependency
 pkgconfigDependency =
-  makeRecord $ do
-    name <-
-      keyValue "name" pkgconfigName
-
-    version <-
-      keyValue "version" versionRange
-
-    return ( Cabal.PkgconfigDependency name version )
+  makeRecord $
+  Cabal.PkgconfigDependency <$> keyValue "name" pkgconfigName
+                            <*> keyValue "version" versionRange
 
 
 
@@ -810,27 +614,12 @@ pkgconfigName =
 
 moduleReexport :: Dhall.Type Cabal.ModuleReexport
 moduleReexport =
-  makeRecord $ do
-    original <-
-      keyValue "original" $
-      makeRecord $ do
-        package <-
-          keyValue "package" ( Dhall.maybe packageName )
+  makeRecord $
+  Cabal.ModuleReexport <$> keyValue "moduleReexportOriginalPackage"
+                           ( Dhall.maybe packageName )
+                       <*> keyValue "moduleReexportOriginalName" moduleName
+                       <*> keyValue "moduleReexportName" moduleName
 
-        name <-
-          keyValue "name" moduleName
-
-        pure ( package, name )
-
-    moduleReexportName <-
-      keyValue "name" moduleName
-
-    pure
-      Cabal.ModuleReexport
-        { moduleReexportOriginalPackage = fst original
-        , moduleReexportOriginalName = snd original
-        , ..
-        }
 
 
 foreignLibOption :: Dhall.Type Cabal.ForeignLibOption
@@ -1086,32 +875,15 @@ genericPackageDescription =
         )
 
   in
-    makeRecord $ do
-      packageDescription <-
-        packageDescription
-
-      genPackageFlags <-
-        keyValue "flags" ( Dhall.list flag )
-
-      condLibrary <-
-        keyValue "library" ( Dhall.maybe ( guarded library ) )
-
-      condSubLibraries <-
-        keyValue "sub-libraries" ( namedList "library" library )
-
-      condForeignLibs <-
-        keyValue "foreign-libraries" ( namedList "foreign-lib" foreignLib )
-
-      condExecutables <-
-        keyValue "executables" ( namedList "executable" executable )
-
-      condTestSuites <-
-        keyValue "test-suites" ( namedList "test-suite" testSuite )
-
-      condBenchmarks <-
-        keyValue "benchmarks" ( namedList "benchmark" benchmark )
-
-      return Cabal.GenericPackageDescription { .. }
+    makeRecord $ Cabal.GenericPackageDescription
+      <$> packageDescription
+      <*> keyValue "flags" ( Dhall.list flag )
+      <*> keyValue "library" ( Dhall.maybe ( guarded library ) )
+      <*> keyValue "sub-libraries" ( namedList "library" library )
+      <*> keyValue "foreign-libraries" ( namedList "foreign-lib" foreignLib )
+      <*> keyValue "executables" ( namedList "executable" executable )
+      <*> keyValue "test-suites" ( namedList "test-suite" testSuite )
+      <*> keyValue "benchmarks" ( namedList "benchmark" benchmark )
 
 
 
@@ -1144,14 +916,9 @@ flagName =
 
 setupBuildInfo :: Dhall.Type Cabal.SetupBuildInfo
 setupBuildInfo =
-  makeRecord $ do
-    setupDepends <-
-      keyValue "setup-depends" ( Dhall.list dependency )
-
-    defaultSetupDepends <-
-      pure False
-
-    return Cabal.SetupBuildInfo { .. }
+  makeRecord $
+  Cabal.SetupBuildInfo <$> keyValue "setup-depends" ( Dhall.list dependency )
+                       <*> pure False
 
 
 
@@ -1163,14 +930,8 @@ filePath =
 
 mixin :: Dhall.Type Cabal.Mixin
 mixin =
-  makeRecord $ do
-    mixinPackageName <-
-      keyValue "package" packageName
-
-    mixinIncludeRenaming <-
-      keyValue "renaming" includeRenaming
-
-    pure Cabal.Mixin { .. }
+  makeRecord $ Cabal.Mixin <$> keyValue "package" packageName
+                           <*> keyValue "renaming" includeRenaming
 
 
 
