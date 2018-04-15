@@ -104,7 +104,7 @@ library
         Dhall.Extra
     ghc-options: -Wall
 
-executable  dhall-to-cabal
+executable  dhall-to-etlas
     main-is: Main.hs
     build-depends:
         etlas-cabal               >= 1.3.0.0 && < 1.4,
@@ -119,7 +119,7 @@ executable  dhall-to-cabal
     other-extensions: NamedFieldPuns
     hs-source-dirs: exe
 
-executable  cabal-to-dhall
+executable  etlas-to-dhall
     main-is: Main.hs
     build-depends:
         etlas-cabal               >= 1.3.0.0 && < 1.4,
