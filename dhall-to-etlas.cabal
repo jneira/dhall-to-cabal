@@ -113,7 +113,8 @@ executable  dhall-to-cabal
         dhall-to-etlas            -any,
         optparse-applicative      >= 0.13.2  && < 0.15,
         prettyprinter             >= 1.2.0.1 && < 1.3,
-        text                      >= 1.2     && < 1.3
+        text                      >= 1.2     && < 1.3,
+        transformers              >= 0.2.0.0 && < 0.6
     default-language: Haskell2010
     other-extensions: NamedFieldPuns
     hs-source-dirs: exe
