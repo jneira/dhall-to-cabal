@@ -43,7 +43,6 @@ import qualified Distribution.Types.Condition as Cabal
 import qualified Distribution.Types.Dependency as Cabal
 import qualified Distribution.Types.ExeDependency as Cabal
 import qualified Distribution.Types.Executable as Cabal
-import qualified Distribution.Types.ExecutableScope as Cabal
 import qualified Distribution.Types.ForeignLib as Cabal
 import qualified Distribution.Types.ForeignLibOption as Cabal
 import qualified Distribution.Types.ForeignLibType as Cabal
@@ -411,7 +410,7 @@ newtype Union a =
   deriving ( Monoid )
 
 
-runUnion :: ( HasCallStack, Show a ) => Union a -> Dhall.InputType a
+runUnion :: ( Show a ) => Union a -> Dhall.InputType a
 runUnion ( Union ( f, t ) ) =
   Dhall.InputType
     { Dhall.embed =
@@ -1270,7 +1269,6 @@ executable =
   ( runRecordInputType
       ( mconcat
           [ recordField "main-is" ( Cabal.modulePath >$< stringToDhall )
-          , recordField "scope" ( Cabal.exeScope >$< executableScope )
           , Cabal.buildInfo >$< buildInfoRecord
           ]
       )
@@ -1278,24 +1276,6 @@ executable =
     { Dhall.declared =
         Expr.Var "types" `Expr.Field` "Executable"
     }
-
-
-executableScope :: Dhall.InputType Cabal.ExecutableScope
-executableScope =
-  runUnion
-    ( mconcat
-        [ unionAlt
-            "Public"
-            ( \x ->
-                case x of
-                  Cabal.ExecutablePublic -> Just ()
-                  Cabal.ExecutableScopeUnknown -> Just ()
-                  _ -> Nothing
-            )
-            Dhall.inject
-        , unionAlt "Private" ( \x -> case x of Cabal.ExecutablePrivate -> Just () ; _ -> Nothing ) Dhall.inject
-        ]
-    )
 
 
 foreignLibrary :: Dhall.InputType Cabal.ForeignLib
