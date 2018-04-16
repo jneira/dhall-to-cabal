@@ -114,7 +114,7 @@ packageDescription =
   <*> keyValue "source-repos" ( Dhall.list sourceRepo )
   <*> keyValue "synopsis" Dhall.string
   <*> keyValue "description" Dhall.string
-  <*> keyValue "ctaegory" Dhall.string
+  <*> keyValue "category" Dhall.string
   <*> keyValue "x-fields"
       ( Dhall.list ( Dhall.pair Dhall.string Dhall.string ) )
     -- Cabal documentation states
@@ -214,7 +214,7 @@ buildInfo = Cabal.BuildInfo
   <*> keyValue "default-extensions" ( Dhall.list extension )
   <*> keyValue "other-extensions" ( Dhall.list extension )
   <*> pure []  -- old-extensions
-  <*> keyValue "extra-libraries" ( Dhall.list Dhall.string )
+  <*> keyValue "maven-depends" ( Dhall.list Dhall.string )
   <*> keyValue "extra-ghci-libraries"
       ( Dhall.list Dhall.string )
   <*> keyValue "extra-lib-dirs" ( Dhall.list Dhall.string )
