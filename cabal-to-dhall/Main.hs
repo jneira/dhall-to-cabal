@@ -81,7 +81,7 @@ preludeLocation =
               Nothing
           , Dhall.Core.pathType =
               Dhall.Core.URL
-                "https://raw.githubusercontent.com/dhall-lang/dhall-to-cabal/1.0.0/dhall/prelude.dhall"
+                "https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/1.0.0/dhall/prelude.dhall"
                 Nothing
           }
     , Dhall.Core.pathMode =
@@ -98,7 +98,7 @@ typesLocation =
               Nothing
           , Dhall.Core.pathType =
               Dhall.Core.URL
-                "https://raw.githubusercontent.com/dhall-lang/dhall-to-cabal/1.0.0/dhall/types.dhall"
+                "https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/1.0.0/dhall/types.dhall"
                 Nothing
           }
     , Dhall.Core.pathMode =
@@ -521,6 +521,9 @@ compilerFlavor =
 
         Cabal.YHC ->
           constructor "YHC" ( Expr.RecordLit mempty )
+
+        Cabal.Eta ->
+          constructor "Eta" ( Expr.RecordLit mempty )
     , Dhall.declared =
         Expr.Var "types" `Expr.Field` "Compiler"
     }
@@ -1016,7 +1019,7 @@ buildInfoRecord =
     , recordField "other-languages" ( contramap Cabal.otherLanguages ( listOf language ) )
     , recordField "default-extensions" ( Cabal.defaultExtensions >$< listOf extension )
     , recordField "other-extensions" ( Cabal.otherExtensions >$< listOf extension )
-    , recordField "extra-libraries" ( Cabal.extraLibs >$< listOf stringToDhall )
+    , recordField "maven-depends" ( Cabal.extraLibs >$< listOf stringToDhall )
     , recordField "extra-ghci-libraries" ( Cabal.extraGHCiLibs >$< listOf stringToDhall )
     , recordField "extra-lib-dirs" ( Cabal.extraLibDirs >$< listOf stringToDhall )
     , recordField "include-dirs" ( Cabal.includeDirs >$< listOf stringToDhall )
@@ -1027,6 +1030,7 @@ buildInfoRecord =
     , recordField "shared-options" ( Cabal.sharedOptions >$< compilerOptions )
     , recordField "build-depends" ( Cabal.targetBuildDepends >$< listOf dependency )
     , recordField "mixins" ( Cabal.mixins >$< listOf mixin )
+    , recordField "java-sources" ( contramap Cabal.cSources ( listOf stringToDhall ) )
     ]
 
 
