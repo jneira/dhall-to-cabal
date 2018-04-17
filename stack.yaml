@@ -7,7 +7,7 @@ extra-deps:
   subdirs:
   - etlas-cabal
 - git: https://github.com/dhall-lang/dhall-haskell.git
-  commit: a0a2ac12eb93db3cc07f3fc2ce7d1327fbd4289f
+  commit: ac68adc14e9c3d4a870e2887c3f61c68b87b562c
 - ansi-terminal-0.7.1.1
 - ansi-wl-pprint-0.6.8.2
 - cryptonite-0.24
