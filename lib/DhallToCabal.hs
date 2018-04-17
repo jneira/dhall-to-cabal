@@ -574,6 +574,7 @@ compilerOptions =
       , (,) <$> pure Cabal.JHC <*> keyValue "JHC" options
       , (,) <$> pure Cabal.LHC <*> keyValue "LHC" options
       , (,) <$> pure Cabal.UHC <*> keyValue "UHC" options
+      , (,) <$> pure Cabal.Eta <*> keyValue "Eta" options
       ]
 
   where
