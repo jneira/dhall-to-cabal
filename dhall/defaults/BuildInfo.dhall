@@ -35,6 +35,8 @@
     [] : List Text
 , extra-libraries =
     [] : List Text
+, maven-depends =
+    [] : List Text
 , frameworks =
     [] : List Text
 , hs-source-dirs =
@@ -63,4 +65,6 @@
     ./CompilerOptions.dhall 
 , mixins =
     [] : List ../types/Mixin.dhall 
+, java-sources =
+    [] : List Text
 }
