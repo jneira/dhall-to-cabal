@@ -4,27 +4,52 @@
 in  let types =
           https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/1.0.0/dhall/types.dhall 
 
-in  { author =
-        ""
-    , benchmarks =
-        [] : List
-             { benchmark : types.ConfigOptions → types.Benchmark, name : Text }
-    , bug-reports =
+in let v = prelude.v
+
+in let pkg =
+       \(name : Text)
+    -> \(version-range : types.VersionRange)
+    -> { bounds = version-range, package = name }
+
+in let pkgVer =
+         \(packageName : Text) -> \(minor : Text) -> \(major : Text)
+      -> package packageName
+         prelude.intersectVersionRanges
+            (prelude.orLaterVersion (v minor))
+            (prelude.earlierVersion (v major))
+
+in let deps =
+         { etlas-cabal    = pkgVer "etlas-cabal"
+		   				  		   "1.3.0.0" "1.4"
+         , base           = pkgVer "base"
+		   				  		   "4.5"     "5"
+         , dhall          = pkgVer "dhall"
+		   				  		   "1.12.0"  "1.13"
+         , dhall-to-etlas = pkg    "dhall-to-etlas"
+		   				  		   prelude.anyVersion
+		 , optparse       = pkgVer "optparse-applicative"
+		   				  		   "0.13.2"  "0.15"
+		 , prettyprinter  = pkgVer "prettyprinter"
+		   				  		   "1.3"     "1.2.0.1" 
+		 , text			  = pkg	   "text"
+		   				  		   prelude.withinVersion (v "1.2")
+		 , contravariant  = pkg	   "contravariant"
+		   				  		   prelude.withinVersion (v "1.4")
+		 , hashable		  = pkgVer "hashable"
+		   				  		   "1.2.6.1" "1.3"
+		 , insert-ordered-containers =
+					        pkgVer "insert-ordered-containers"
+								   "0.2.1.0" "0.3"
+		 }
+
+in  { bug-reports =
         "https://github.com/eta-lang/dhall-to-etlas/issues"
     , build-type =
         [ prelude.types.BuildTypes.Simple {=} ] : Optional types.BuildType
     , cabal-version =
-        prelude.v "1.10"
+        v "1.10"
     , category =
         "Distribution"
-    , copyright =
-        ""
-    , custom-setup =
-        [] : Optional types.CustomSetup
-    , data-dir =
-        ""
-    , data-files =
-        [] : List Text
     , description =
         ''
         dhall-to-etlas takes Dhall expressions and compiles them into Etlas
@@ -34,28 +59,26 @@ in  { author =
         ''
     , executables =
         [ { executable =
-                λ(config : types.ConfigOptions)
-              → { autogen-modules =
-                    [] : List Text
-                , build-depends =
+                \(config : types.ConfigOptions)
+             -> { build-depends =
                     [ { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "1.3.0.0"))
-                          (prelude.earlierVersion (prelude.v "1.4"))
+                          (prelude.orLaterVersion (v "1.3.0.0"))
+                          (prelude.earlierVersion (v "1.4"))
                       , package =
                           "etlas-cabal"
                       }
                     , { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "4.5"))
-                          (prelude.earlierVersion (prelude.v "5"))
+                          (prelude.orLaterVersion (v "4.5"))
+                          (prelude.earlierVersion (v "5"))
                       , package =
                           "base"
                       }
                     , { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "1.12.0"))
-                          (prelude.earlierVersion (prelude.v "1.13"))
+                          (prelude.orLaterVersion (v "1.12.0"))
+                          (prelude.earlierVersion (v "1.13"))
                       , package =
                           "dhall"
                       }
@@ -66,130 +89,62 @@ in  { author =
                       }
                     , { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "0.13.2"))
-                          (prelude.earlierVersion (prelude.v "0.15"))
+                          (prelude.orLaterVersion (v "0.13.2"))
+                          (prelude.earlierVersion (v "0.15"))
                       , package =
                           "optparse-applicative"
                       }
                     , { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "1.2.0.1"))
-                          (prelude.earlierVersion (prelude.v "1.3"))
+                          (prelude.orLaterVersion (v "1.2.0.1"))
+                          (prelude.earlierVersion (v "1.3"))
                       , package =
                           "prettyprinter"
                       }
                     , { bounds =
-                          prelude.withinVersion (prelude.v "1.2")
+                          prelude.withinVersion (v "1.2")
                       , package =
                           "text"
                       }
                     , { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "0.2.0.0"))
-                          (prelude.earlierVersion (prelude.v "0.6"))
+                          (prelude.orLaterVersion (v "0.2.0.0"))
+                          (prelude.earlierVersion (v "0.6"))
                       , package =
                           "transformers"
                       }
                     ]
-                , build-tool-depends =
-                    [] : List
-                         { component :
-                             Text
-                         , package :
-                             Text
-                         , version :
-                             types.VersionRange
-                         }
-                , build-tools =
-                    [] : List { exe : Text, version : types.VersionRange }
-                , buildable =
-                    True
-                , c-sources =
-                    [] : List Text
-                , cc-options =
-                    [] : List Text
-                , compiler-options =
-                    prelude.defaults.CompilerOptions
-                , cpp-options =
-                    [] : List Text
-                , default-extensions =
-                    [] : List types.Extension
                 , default-language =
-                    [ < Haskell2010 =
-                          {=}
-                      | UnknownLanguage :
-                          { _1 : Text }
-                      | Haskell98 :
-                          {}
-                      >
-                    ] : Optional types.Language
-                , extra-framework-dirs =
-                    [] : List Text
-                , extra-ghci-libraries =
-                    [] : List Text
-                , extra-lib-dirs =
-                    [] : List Text
-                , frameworks =
-                    [] : List Text
-                , hs-source-dirs =
-                    [ "exe" ]
-                , include-dirs =
-                    [] : List Text
-                , includes =
-                    [] : List Text
-                , install-includes =
-                    [] : List Text
-                , java-sources =
-                    [] : List Text
-                , js-sources =
-                    [] : List Text
-                , ld-options =
-                    [] : List Text
+                    [ Haskell2010 {=} ] : Optional types.Language
                 , main-is =
                     "Main.hs"
-                , maven-depends =
-                    [] : List Text
-                , mixins =
-                    [] : List types.Mixin
                 , other-extensions =
                     [ prelude.types.Extensions.NamedFieldPuns True ]
-                , other-languages =
-                    [] : List types.Language
-                , other-modules =
-                    [] : List Text
-                , pkgconfig-depends =
-                    [] : List { name : Text, version : types.VersionRange }
-                , profiling-options =
-                    prelude.defaults.CompilerOptions
-                , shared-options =
-                    prelude.defaults.CompilerOptions
                 }
           , name =
               "dhall-to-etlas"
           }
         , { executable =
-                λ(config : types.ConfigOptions)
-              → { autogen-modules =
-                    [] : List Text
-                , build-depends =
+                \(config : types.ConfigOptions)
+             -> { build-depends =
                     [ { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "1.3.0.0"))
-                          (prelude.earlierVersion (prelude.v "1.4"))
+                          (prelude.orLaterVersion (v "1.3.0.0"))
+                          (prelude.earlierVersion (v "1.4"))
                       , package =
                           "etlas-cabal"
                       }
                     , { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "4.5"))
-                          (prelude.earlierVersion (prelude.v "5"))
+                          (prelude.orLaterVersion (v "4.5"))
+                          (prelude.earlierVersion (v "5"))
                       , package =
                           "base"
                       }
                     , { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "1.12.0"))
-                          (prelude.earlierVersion (prelude.v "1.13"))
+                          (prelude.orLaterVersion (v "1.12.0"))
+                          (prelude.earlierVersion (v "1.13"))
                       , package =
                           "dhall"
                       }
@@ -200,122 +155,52 @@ in  { author =
                       }
                     , { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "0.13.2"))
-                          (prelude.earlierVersion (prelude.v "0.15"))
+                          (prelude.orLaterVersion (v "0.13.2"))
+                          (prelude.earlierVersion (v "0.15"))
                       , package =
                           "optparse-applicative"
                       }
                     , { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "1.2.0.1"))
-                          (prelude.earlierVersion (prelude.v "1.3"))
+                          (prelude.orLaterVersion (v "1.2.0.1"))
+                          (prelude.earlierVersion (v "1.3"))
                       , package =
                           "prettyprinter"
                       }
                     , { bounds =
-                          prelude.withinVersion (prelude.v "1.2")
+                          prelude.withinVersion (v "1.2")
                       , package =
                           "text"
                       }
                     , { bounds =
-                          prelude.withinVersion (prelude.v "1.4")
+                          prelude.withinVersion (v "1.4")
                       , package =
                           "contravariant"
                       }
                     , { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "1.2.6.1"))
-                          (prelude.earlierVersion (prelude.v "1.3"))
+                          (prelude.orLaterVersion (v "1.2.6.1"))
+                          (prelude.earlierVersion (v "1.3"))
                       , package =
                           "hashable"
                       }
                     , { bounds =
                           prelude.intersectVersionRanges
-                          (prelude.orLaterVersion (prelude.v "0.2.1.0"))
-                          (prelude.earlierVersion (prelude.v "0.3"))
+                          (prelude.orLaterVersion (v "0.2.1.0"))
+                          (prelude.earlierVersion (v "0.3"))
                       , package =
                           "insert-ordered-containers"
                       }
                     ]
-                , build-tool-depends =
-                    [] : List
-                         { component :
-                             Text
-                         , package :
-                             Text
-                         , version :
-                             types.VersionRange
-                         }
-                , build-tools =
-                    [] : List { exe : Text, version : types.VersionRange }
-                , buildable =
-                    True
-                , c-sources =
-                    [] : List Text
-                , cc-options =
-                    [] : List Text
-                , compiler-options =
-                    prelude.defaults.CompilerOptions
-                , cpp-options =
-                    [] : List Text
-                , default-extensions =
-                    [] : List types.Extension
                 , default-language =
-                    [ < Haskell2010 =
-                          {=}
-                      | UnknownLanguage :
-                          { _1 : Text }
-                      | Haskell98 :
-                          {}
-                      >
-                    ] : Optional types.Language
-                , extra-framework-dirs =
-                    [] : List Text
-                , extra-ghci-libraries =
-                    [] : List Text
-                , extra-lib-dirs =
-                    [] : List Text
-                , frameworks =
-                    [] : List Text
-                , hs-source-dirs =
-                    [ "cabal-to-dhall" ]
-                , include-dirs =
-                    [] : List Text
-                , includes =
-                    [] : List Text
-                , install-includes =
-                    [] : List Text
-                , java-sources =
-                    [] : List Text
-                , js-sources =
-                    [] : List Text
-                , ld-options =
-                    [] : List Text
+                    [ Haskell2010 {=} ] : Optional types.Language
                 , main-is =
                     "Main.hs"
-                , maven-depends =
-                    [] : List Text
-                , mixins =
-                    [] : List types.Mixin
-                , other-extensions =
-                    [ prelude.types.Extensions.NamedFieldPuns True ]
-                , other-languages =
-                    [] : List types.Language
-                , other-modules =
-                    [] : List Text
-                , pkgconfig-depends =
-                    [] : List { name : Text, version : types.VersionRange }
-                , profiling-options =
-                    prelude.defaults.CompilerOptions
-                , shared-options =
-                    prelude.defaults.CompilerOptions
                 }
           , name =
               "etlas-to-dhall"
           }
         ]
-    , extra-doc-files =
-        [] : List Text
     , extra-source-files =
         [ "Changelog.md"
         , "dhall/defaults/BuildInfo.dhall"
@@ -375,123 +260,92 @@ in  { author =
         , "dhall/types/VersionRange/UnionVersionRanges.dhall"
         , "dhall/types/SetupBuildInfo.dhall"
         ]
-    , extra-tmp-files =
-        [] : List Text
-    , flags =
-        [] : List
-             { default : Bool, description : Text, manual : Bool, name : Text }
-    , foreign-libraries =
-        [] : List
-             { foreign-lib :
-                 types.ConfigOptions → types.ForeignLibrary
-             , name :
-                 Text
-             }
     , homepage =
         "https://github.com/eta-lang/dhall-to-etlas"
     , library =
-        [   λ(config : types.ConfigOptions)
-          → { autogen-modules =
-                [] : List Text
-            , build-depends =
+        [   \(config : types.ConfigOptions)
+         -> { build-depends =
                 [ { bounds =
                       prelude.intersectVersionRanges
-                      (prelude.orLaterVersion (prelude.v "1.3.0.0"))
-                      (prelude.earlierVersion (prelude.v "1.4"))
+                      (prelude.orLaterVersion (v "1.3.0.0"))
+                      (prelude.earlierVersion (v "1.4"))
                   , package =
                       "etlas-cabal"
                   }
                 , { bounds =
                       prelude.intersectVersionRanges
-                      (prelude.orLaterVersion (prelude.v "4.5"))
-                      (prelude.earlierVersion (prelude.v "5"))
+                      (prelude.orLaterVersion (v "4.5"))
+                      (prelude.earlierVersion (v "5"))
                   , package =
                       "base"
                   }
                 , { bounds =
                       prelude.intersectVersionRanges
-                      (prelude.orLaterVersion (prelude.v "0.10"))
-                      (prelude.earlierVersion (prelude.v "1"))
+                      (prelude.orLaterVersion (v "0.10"))
+                      (prelude.earlierVersion (v "1"))
                   , package =
                       "bytestring"
                   }
                 , { bounds =
-                      prelude.withinVersion (prelude.v "0.5")
+                      prelude.withinVersion (v "0.5")
                   , package =
                       "containers"
                   }
                 , { bounds =
                       prelude.intersectVersionRanges
-                      (prelude.orLaterVersion (prelude.v "1.12.0"))
-                      (prelude.earlierVersion (prelude.v "1.13"))
+                      (prelude.orLaterVersion (v "1.12.0"))
+                      (prelude.earlierVersion (v "1.13"))
                   , package =
                       "dhall"
                   }
                 , { bounds =
                       prelude.intersectVersionRanges
-                      (prelude.orLaterVersion (prelude.v "6.3.1"))
-                      (prelude.earlierVersion (prelude.v "6.4"))
+                      (prelude.orLaterVersion (v "6.3.1"))
+                      (prelude.earlierVersion (v "6.4"))
                   , package =
                       "formatting"
                   }
                 , { bounds =
                       prelude.intersectVersionRanges
-                      (prelude.orLaterVersion (prelude.v "1.2.6.1"))
-                      (prelude.earlierVersion (prelude.v "1.3"))
+                      (prelude.orLaterVersion (v "1.2.6.1"))
+                      (prelude.earlierVersion (v "1.3"))
                   , package =
                       "hashable"
                   }
                 , { bounds =
                       prelude.intersectVersionRanges
-                      (prelude.orLaterVersion (prelude.v "0.2.1.0"))
-                      (prelude.earlierVersion (prelude.v "0.3"))
+                      (prelude.orLaterVersion (v "0.2.1.0"))
+                      (prelude.earlierVersion (v "0.3"))
                   , package =
                       "insert-ordered-containers"
                   }
                 , { bounds =
-                      prelude.withinVersion (prelude.v "1.2")
+                      prelude.withinVersion (v "1.2")
                   , package =
                       "text"
                   }
                 , { bounds =
                       prelude.intersectVersionRanges
-                      (prelude.orLaterVersion (prelude.v "0.2.0.0"))
-                      (prelude.earlierVersion (prelude.v "0.6"))
+                      (prelude.orLaterVersion (v "0.2.0.0"))
+                      (prelude.earlierVersion (v "0.6"))
                   , package =
                       "transformers"
                   }
                 , { bounds =
                       prelude.intersectVersionRanges
-                      (prelude.orLaterVersion (prelude.v "6.1.1"))
-                      (prelude.earlierVersion (prelude.v "6.5"))
+                      (prelude.orLaterVersion (v "6.1.1"))
+                      (prelude.earlierVersion (v "6.5"))
                   , package =
                       "megaparsec"
                   }
                 , { bounds =
                       prelude.intersectVersionRanges
-                      (prelude.orLaterVersion (prelude.v "0.11.0.0"))
-                      (prelude.earlierVersion (prelude.v "0.13"))
+                      (prelude.orLaterVersion (v "0.11.0.0"))
+                      (prelude.earlierVersion (v "0.13"))
                   , package =
                       "vector"
                   }
                 ]
-            , build-tool-depends =
-                [] : List
-                     { component :
-                         Text
-                     , package :
-                         Text
-                     , version :
-                         types.VersionRange
-                     }
-            , build-tools =
-                [] : List { exe : Text, version : types.VersionRange }
-            , buildable =
-                True
-            , c-sources =
-                [] : List Text
-            , cc-options =
-                [] : List Text
             , compiler-options =
                   prelude.defaults.compiler-options
                 ⫽ { GHC = [ "-Wall" ] : List Text }
@@ -500,42 +354,11 @@ in  { author =
             , default-extensions =
                 [] : List types.Extension
             , default-language =
-                [ < Haskell2010 =
-                      {=}
-                  | UnknownLanguage :
-                      { _1 : Text }
-                  | Haskell98 :
-                      {}
-                  >
-                ] : Optional types.Language
+                [ Haskell2010 {=} ] : Optional types.Language
             , exposed-modules =
                 [ "DhallToCabal" ]
-            , extra-framework-dirs =
-                [] : List Text
-            , extra-ghci-libraries =
-                [] : List Text
-            , extra-lib-dirs =
-                [] : List Text
-            , frameworks =
-                [] : List Text
             , hs-source-dirs =
                 [ "lib" ]
-            , include-dirs =
-                [] : List Text
-            , includes =
-                [] : List Text
-            , install-includes =
-                [] : List Text
-            , java-sources =
-                [] : List Text
-            , js-sources =
-                [] : List Text
-            , ld-options =
-                [] : List Text
-            , maven-depends =
-                [] : List Text
-            , mixins =
-                [] : List types.Mixin
             , other-extensions =
                 [ prelude.types.Extensions.GADTs True
                 , prelude.types.Extensions.GeneralizedNewtypeDeriving True
@@ -543,60 +366,14 @@ in  { author =
                 , prelude.types.Extensions.OverloadedStrings True
                 , prelude.types.Extensions.RecordWildCards True
                 ]
-            , other-languages =
-                [] : List types.Language
             , other-modules =
                 [ "DhallToCabal.ConfigTree"
                 , "DhallToCabal.Diff"
                 , "Dhall.Extra"
                 ]
-            , pkgconfig-depends =
-                [] : List { name : Text, version : types.VersionRange }
-            , profiling-options =
-                prelude.defaults.CompilerOptions
-            , reexported-modules =
-                [] : List
-                     { name :
-                         Text
-                     , original :
-                         { name : Text, package : Optional Text }
-                     }
-            , shared-options =
-                prelude.defaults.CompilerOptions
-            , signatures =
-                [] : List Text
             }
         ] : Optional (types.ConfigOptions → types.Library)
-    , license =
-        < MIT =
-            {=}
-        | GPL :
-            Optional types.Version
-        | AGPL :
-            Optional types.Version
-        | LGPL :
-            Optional types.Version
-        | BSD2 :
-            {}
-        | BSD3 :
-            {}
-        | BSD4 :
-            {}
-        | ISC :
-            {}
-        | MPL :
-            types.Version
-        | Apache :
-            Optional types.Version
-        | PublicDomain :
-            {}
-        | AllRightsReserved :
-            {}
-        | Unspecified :
-            {}
-        | Other :
-            {}
-        >
+    , license = MIT = {=}
     , license-files =
         [ "LICENSE" ]
     , maintainer =
@@ -647,19 +424,8 @@ in  { author =
               ] : Optional types.RepoType
           }
         ]
-    , stability =
-        ""
-    , sub-libraries =
-        [] : List { library : types.ConfigOptions → types.Library, name : Text }
     , synopsis =
         "Compile Dhall expressions to Etlas files"
-    , test-suites =
-        [] : List
-             { name : Text, test-suite : types.ConfigOptions → types.TestSuite }
-    , tested-with =
-        [] : List { compiler : types.Compiler, version : types.VersionRange }
     , version =
-        prelude.v "1.0.0"
-    , x-fields =
-        [] : List { _1 : Text, _2 : Text }
+        v "1.0.0"
     }
