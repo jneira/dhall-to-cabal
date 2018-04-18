@@ -8,8 +8,7 @@ in let Haskell2010 =
     [ prelude.types.Languages.Haskell2010 {=} ] : Optional types.Language
 
 in let pkg =
-       \ (name : Text)
-    -> \ (version-range : types.VersionRange)
+       \ (name : Text) -> \ (version-range : types.VersionRange)
     -> { bounds = version-range, package = name }
 
 in let pkgVer =
@@ -201,7 +200,7 @@ in  prelude.utils.GitHub-project
               , default-language =
                   Haskell2010
               }
-		   )
+         )
         , prelude.unconditional.executable
           "etlas-to-dhall"
           (   prelude.defaults.Executable
