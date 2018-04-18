@@ -12,4 +12,6 @@
     Optional Text
 , kind :
     ./RepoKind.dhall 
+, commit :
+    Optional Text
 }

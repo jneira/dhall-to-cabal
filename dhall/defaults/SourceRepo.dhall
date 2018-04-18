@@ -12,4 +12,6 @@
     [] : Optional Text
 , kind =
     (constructors ../types/RepoKind.dhall ).RepoHead {=}
+, commit =
+    [] : Optional Text
 }
