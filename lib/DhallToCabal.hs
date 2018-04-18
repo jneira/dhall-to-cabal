@@ -318,7 +318,7 @@ sourceRepo =
                    <*> keyValue "module" ( Dhall.maybe Dhall.string )
                    <*> keyValue "branch" ( Dhall.maybe Dhall.string )
                    <*> keyValue "tag" ( Dhall.maybe Dhall.string )
-                   <*> keyValue "repoCommit" ( Dhall.maybe Dhall.string )
+                   <*> keyValue "commit" ( Dhall.maybe Dhall.string )
                    <*> keyValue "subdir" ( Dhall.maybe filePath )
 
 
