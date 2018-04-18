@@ -1,22 +1,23 @@
-    let prelude =
-          https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/1.0.0/dhall/prelude.dhall 
+   let prelude = ./dhall/prelude.dhall 
 
-in  let types =
-          https://raw.githubusercontent.com/eta-lang/dhall-to-etlas/1.0.0/dhall/types.dhall 
+in let types = ./dhall/types.dhall  
 
 in let v = prelude.v
 
+in let Haskell2010 =
+    [ prelude.types.Languages.Haskell2010 {=} ] : Optional types.Language
+
 in let pkg =
-       \(name : Text)
-    -> \(version-range : types.VersionRange)
+       \ (name : Text)
+    -> \ (version-range : types.VersionRange)
     -> { bounds = version-range, package = name }
 
 in let pkgVer =
          \(packageName : Text) -> \(minor : Text) -> \(major : Text)
-      -> package packageName
-         prelude.intersectVersionRanges
-            (prelude.orLaterVersion (v minor))
-            (prelude.earlierVersion (v major))
+      -> pkg packageName
+         (prelude.intersectVersionRanges
+             (prelude.orLaterVersion (v minor))
+             (prelude.earlierVersion (v major)))
 
 in let deps =
          { etlas-cabal =
@@ -24,9 +25,9 @@ in let deps =
          , base =
              pkgVer "base"           "4.5"      "5"
          , bytestring =
-             pkgVer                  "0.10"     "1"
+             pkgVer "bytestring"     "0.10"     "1"
          , containers =
-             pkgVer                  "0.5"      "0.6"
+             pkgVer "containers"     "0.5"      "0.6"
          , dhall =
              pkgVer "dhall"          "1.12.0"   "1.13"
          , dhall-to-etlas =
@@ -40,6 +41,8 @@ in let deps =
              pkgVer "text"           "1.2"      "1.3"
          , transformers =
              pkgVer "transformers"   "0.2.0.0"  "0.6"
+         , formatting =
+             pkgVer "formatting"     "6.3.1"    "6.4"
          , hashable =
              pkgVer "hashable"       "1.2.6.1"  "1.3"
          , insert-ordered-containers =
@@ -49,6 +52,8 @@ in let deps =
              pkgVer "megaparsec"     "6.1.1"    "6.5"
          , vector =
              pkgVer "vector"         "0.11.0.0" "0.13"
+         , contravariant =
+             pkgVer "contravariant"  "1.4"      "1.5"
          }
 
 in  prelude.utils.GitHub-project
@@ -126,7 +131,7 @@ in  prelude.utils.GitHub-project
         , "dhall/types/SetupBuildInfo.dhall"
         ]
     , license =
-        MIT {=}
+        prelude.types.Licenses.MIT {=}
     , license-files =
         [ "LICENSE" ]
     , version =
@@ -151,8 +156,8 @@ in  prelude.utils.GitHub-project
                 , deps.vector
                 ]
             , compiler-options =
-                  prelude.defaults.compiler-options
-               // { GHC = [ "-Wall" ] : List Text }
+                  prelude.defaults.CompilerOptions
+               // { GHC = [ "-Wall" ] }
             , exposed-modules =
                 [ "DhallToCabal" ]
             , hs-source-dirs =
@@ -170,7 +175,7 @@ in  prelude.utils.GitHub-project
                 , "Dhall.Extra"
                 ]
             , default-language =
-                [ Haskell2010 {=} ] : Optional types.Language
+                Haskell2010
             }
         )
     , executables =
@@ -185,7 +190,7 @@ in  prelude.utils.GitHub-project
                   , deps.optparse
                   , deps.prettyprinter
                   , deps.text
-                  , deps.transformer
+                  , deps.transformers
                   ]
               , hs-source-dirs =
                   [ "exe" ]
@@ -194,9 +199,10 @@ in  prelude.utils.GitHub-project
               , other-extensions =
                   [ prelude.types.Extensions.NamedFieldPuns True ]
               , default-language =
-                  [ Haskell2010 {=} ] : Optional types.Language
+                  Haskell2010
               }
-        , prelude.uncoditional.executable =
+		   )
+        , prelude.unconditional.executable
           "etlas-to-dhall"
           (   prelude.defaults.Executable
            // { build-depends =
@@ -208,17 +214,17 @@ in  prelude.utils.GitHub-project
                   , deps.prettyprinter
                   , deps.text
                   , deps.contravariant
-                  , hashable
-                  , insert-ordered-containers
+                  , deps.hashable
+                  , deps.insert-ordered-containers
                   ]
               , hs-source-dirs =
-                  "cabal-to-dhall"
+                  [ "cabal-to-dhall" ]
               , main-is =
                   "Main.hs"
               , other-extensions =
-                    [ prelude.types.Extensions.NamedFieldPuns True ]
+                  [ prelude.types.Extensions.NamedFieldPuns True ]
               , default-language =
-                  [ Haskell2010 {=} ] : Optional types.Language
+                  Haskell2010
               }
          )
        ]
