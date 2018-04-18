@@ -616,10 +616,16 @@ pkgconfigName =
 moduleReexport :: Dhall.Type Cabal.ModuleReexport
 moduleReexport =
   makeRecord $
-  Cabal.ModuleReexport <$> keyValue "moduleReexportOriginalPackage"
-                           ( Dhall.maybe packageName )
-                       <*> keyValue "moduleReexportOriginalName" moduleName
-                       <*> keyValue "moduleReexportName" moduleName
+  (\ original moduleReexportName ->
+     Cabal.ModuleReexport
+        { moduleReexportOriginalPackage = fst original
+        , moduleReexportOriginalName = snd original
+        , ..
+        } ) <$> orig <*> keyValue "name" moduleName
+  where orig = keyValue "original" $
+               makeRecord $
+               (,) <$> keyValue "package" ( Dhall.maybe packageName )
+                   <*> keyValue "name" moduleName
 
 
 
