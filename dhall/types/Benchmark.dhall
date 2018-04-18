@@ -26,7 +26,7 @@
     List Text
 , extra-lib-dirs :
     List Text
-, extra-libraries :
+, maven-depends :
     List Text
 , frameworks :
     List Text
@@ -58,4 +58,6 @@
     ./CompilerOptions.dhall 
 , mixins :
     List ./Mixin.dhall 
+, java-sources :
+    List Text
 }

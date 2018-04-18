@@ -26,7 +26,7 @@
     List Text
 , extra-lib-dirs :
     List Text
-, extra-libraries :
+, maven-depends :
     List Text
 , frameworks :
     List Text
@@ -66,4 +66,6 @@
     Optional { age : Natural, current : Natural, revision : Natural }
 , mixins :
     List ./Mixin.dhall 
+, java-sources :
+    List Text
 }
