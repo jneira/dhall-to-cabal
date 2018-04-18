@@ -1146,7 +1146,7 @@ compilerOptions =
 
           xs ->
             Expr.Prefer
-              ( Expr.Var "prelude" `Expr.Field` "defaults" `Expr.Field` "compiler-options" )
+              ( Expr.Var "prelude" `Expr.Field` "defaults" `Expr.Field` "CompilerOptions" )
               ( Expr.RecordLit
                   ( Map.fromList
                       ( map
