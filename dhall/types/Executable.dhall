@@ -56,8 +56,6 @@
     ./CompilerOptions.dhall 
 , main-is :
     Text
-, scope :
-    ./Scope.dhall 
 , mixins :
     List ./Mixin.dhall 
 , java-sources :
