@@ -33,8 +33,6 @@
     [] : List Text
 , extra-lib-dirs =
     [] : List Text
-, extra-libraries =
-    [] : List Text
 , maven-depends =
     [] : List Text
 , frameworks =
