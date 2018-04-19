@@ -30,3 +30,4 @@ extra-deps:
 - aeson-1.2.3.0
 - th-abstraction-0.2.6.0
 - hashable-1.2.7.0
+- Diff-0.3.4
