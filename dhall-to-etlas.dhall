@@ -53,6 +53,14 @@ in let deps =
              pkgVer "vector"         "0.11.0.0" "0.13"
          , contravariant =
              pkgVer "contravariant"  "1.4"      "1.5"
+         , Diff =
+             pkgVer "Diff"           "0.3.4"    "0.4"
+	 , filepath =
+             pkgVer "filepath"       "1.4"      "1.5"
+         , tasty =
+             pkgVer "tasty"          "0.11"     "0.12"
+         , tasty-golden =
+             pkgVer "tasty-golden"   "2.3"      "2.4"
          }
 
 in  prelude.utils.GitHub-project
@@ -227,4 +235,28 @@ in  prelude.utils.GitHub-project
               }
          )
        ]
+	, test-suites =
+	    [ prelude.unconditional.test-suite
+              "golden-tests"
+              (   prelude.defaults.TestSuite
+               // { build-depends =
+	              [ deps.base
+                      , deps.etlas-cabal
+                      , deps.Diff
+                      , deps.bytestring
+                      , deps.dhall-to-etlas
+                      , deps.filepath
+                      , deps.tasty
+                      , deps.tasty-golden
+                      , deps.text
+                      ]
+                  , hs-source-dirs =
+                      [ "golden-tests" ]
+                  , type =
+                      prelude.types.TestTypes.exitcode-stdio
+                      { main-is = "GoldenTests.hs" }
+                  , default-language = Haskell2010
+                  }
+              )
+            ]
     }
