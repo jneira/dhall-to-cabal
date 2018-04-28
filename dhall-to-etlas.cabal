@@ -1,6 +1,6 @@
 name: dhall-to-etlas
 version: 1.0.0
-cabal-version: 1.10
+cabal-version: 1.12
 build-type: Simple
 license: MIT
 license-file: LICENSE

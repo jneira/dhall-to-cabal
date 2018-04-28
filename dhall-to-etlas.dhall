@@ -144,7 +144,7 @@ in  prelude.utils.GitHub-project
     , version =
         v "1.0.0"
     , cabal-version =
-        v "1.10"
+        v "1.12"
     , library =
 	prelude.unconditional.library
         (   prelude.defaults.Library
