@@ -28,7 +28,7 @@ in let deps =
          , containers =
              pkgVer "containers"     "0.5"      "0.6"
          , dhall =
-             pkgVer "dhall"          "1.12.0"   "1.13"
+             pkgVer "dhall"          "1.13.0"   "1.14"
          , dhall-to-etlas =
              pkg    "dhall-to-etlas" prelude.anyVersion
          , optparse =
