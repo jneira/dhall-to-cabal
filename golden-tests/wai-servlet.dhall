@@ -2,8 +2,6 @@
 
 in let types = ./dhall/types.dhall
 
-in let Dependency = ./dhall/types/Dependency.dhall
-
 in let v = prelude.v
 
 in let pkg =
@@ -86,7 +84,7 @@ in  prelude.utils.GitHub-project
                 )
               # ( if etaImpl config ( prelude.orLaterVersion ( v "0.0.9.7" ) )
                   then [ ( pkgAnyVer "eta-java-interop" ) ]
-                  else [ ] : List Dependency
+                  else [ ] : List types.Dependency
                  )
             , maven-depends =
                 [ "javax.servlet:servlet-api:2.5" ]
