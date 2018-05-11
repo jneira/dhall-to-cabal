@@ -15,9 +15,10 @@ in let pkgAnyVer =
 in let etaImpl =
        \ ( cfg : types.ConfigOptions ) -> \ ( ver : types.VersionRange )
     -> cfg.impl ( prelude.types.Compilers.Eta {=} ) ver
-       
-in  prelude.utils.GitHub-project
-    { owner = "jneira" , repo = "wai-servlet" }
+
+in let GitHub-project = prelude.utils.GitHub-project
+                        { owner = "jneira" , repo = "wai-servlet" }
+in  GitHub-project
  // { description =
         "Integration of eta wai applications with the servlet api"
     , stability =
@@ -70,14 +71,18 @@ in  prelude.utils.GitHub-project
             , default-language =
                 [ prelude.types.Languages.Haskell2010 {=} ] : Optional types.Language
             , build-depends =
-                ( [ pkg       "base" ( prelude.withinVersion ( v "4.8" ) )
+                ( [ pkg       "base"
+                     ( prelude.intersectVersionRanges
+                       ( prelude.orLaterVersion ( v "4.8" ) )
+                       ( prelude.earlierVersion ( v "4.9" ) ) ) 
                   , pkgAnyVer "wai"
                   , pkgAnyVer "network"
-                  , pkg       "http-types" ( prelude.orLaterVersion ( v "0.10" ) )
+                  , pkg       "http-types"
+                       ( prelude.orLaterVersion ( v "0.10" ) )
                   , pkgAnyVer "http-date"
                   , pkgAnyVer "blaze-builder"
                   , pkgAnyVer "bytestring"
-                  , pkgAnyVer "case-insesitive"
+                  , pkgAnyVer "case-insensitive"
                   , pkgAnyVer "hashable"
                   , pkgAnyVer "utf8-string"
                   ]
