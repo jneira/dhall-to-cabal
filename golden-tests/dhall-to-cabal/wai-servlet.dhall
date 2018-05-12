@@ -13,7 +13,7 @@ in let pkgAnyVer =
     -> pkg packageName prelude.anyVersion
 
 in let etaImpl =
-       \ ( cfg : types.ConfigOptions ) -> \ ( ver : types.VersionRange )
+       \ ( cfg : types.Config ) -> \ ( ver : types.VersionRange )
     -> cfg.impl ( prelude.types.Compilers.Eta {=} ) ver
 
 in let GitHub-project = prelude.utils.GitHub-project
@@ -53,7 +53,7 @@ in  GitHub-project
           }
         ]
     , library =
-        [ \ ( config : types.ConfigOptions )
+        [ \ ( config : types.Config )
          -> prelude.defaults.Library
          // { exposed-modules =
                 [ "Network.Wai.Servlet"
