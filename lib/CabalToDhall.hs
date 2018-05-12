@@ -353,7 +353,7 @@ newtype Union a =
   deriving ( Monoid )
 
 
-runUnion :: ( HasCallStack, Show a ) => Union a -> Dhall.InputType a
+runUnion :: ( Show a ) => Union a -> Dhall.InputType a
 runUnion ( Union ( f, t ) ) =
   Dhall.InputType
     { Dhall.embed =
