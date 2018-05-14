@@ -32,7 +32,10 @@ main =
 goldenTests :: IO TestTree
 goldenTests = do
   dhallFiles <-
-    findByExtension [ ".dhall" ] "golden-tests/dhall-to-cabal"
+    return $ map
+             (\ f -> "./golden-tests/dhall-to-cabal/" ++ f ++ ".dhall")
+             ["empty-package","dhall-to-etlas","wai-servlet"]
+    -- findByExtension [ ".dhall" ] "golden-tests/dhall-to-cabal"
   cabalFiles <-
     findByExtension [ ".cabal" ] "golden-tests/cabal-to-dhall"
 
