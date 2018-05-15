@@ -86,13 +86,13 @@ library
         base >=4.5 && <5,
         bytestring >=0.10 && <1,
         containers >=0.5 && <0.6,
-        dhall >=1.12.0 && <1.13,
+        contravariant >=1.4 && <1.5          
+        dhall >=1.13.0 && <1.14,
         formatting >=6.3.1 && <6.4,
         hashable >=1.2.6.1 && <1.3,
         insert-ordered-containers >=0.2.1.0 && <0.3,
         text >=1.2 && <1.3,
         transformers >=0.2.0.0 && <0.6,
-        megaparsec >=6.1.1 && <6.5,
         vector >=0.11.0.0 && <0.13
     default-language: Haskell2010
     other-extensions: GADTs GeneralizedNewtypeDeriving LambdaCase
@@ -109,12 +109,11 @@ executable  dhall-to-etlas
     build-depends:
         etlas-cabal >=1.3.0.0 && <1.4,
         base >=4.5 && <5,
-        dhall >=1.12.0 && <1.13,
+        dhall >=1.13.0 && <1.14,
         dhall-to-etlas -any,
-        optparse-applicative >=0.13.2 && <0.15,
+        optparse-applicative >=0.13.2 && <0.14,
         prettyprinter >=1.2.0.1 && <1.3,
         text >=1.2 && <1.3,
-        transformers >=0.2.0.0 && <0.6
     default-language: Haskell2010
     other-extensions: NamedFieldPuns
     hs-source-dirs: exe
@@ -122,16 +121,10 @@ executable  dhall-to-etlas
 executable  etlas-to-dhall
     main-is: Main.hs
     build-depends:
-        etlas-cabal >=1.3.0.0 && <1.4,
         base >=4.5 && <5,
-        dhall >=1.12.0 && <1.13,
         dhall-to-etlas -any,
         optparse-applicative >=0.13.2 && <0.15,
-        prettyprinter >=1.2.0.1 && <1.3,
         text >=1.2 && <1.3,
-        contravariant >=1.4 && <1.5,
-        hashable >=1.2.6.1 && <1.3,
-        insert-ordered-containers >=0.2.1.0 && <0.3
     default-language: Haskell2010
     other-extensions: NamedFieldPuns
     hs-source-dirs: cabal-to-dhall
@@ -146,7 +139,7 @@ test-suite  golden-tests
         bytestring >=0.10 && <1,
         dhall-to-etlas -any,
         filepath >=1.4 && <1.5,
-        tasty >=0.11 && <0.12,
+        tasty >=0.11 && <1.2,
         tasty-golden >=2.3 && <2.4,
         text >=1.2 && <1.3
     default-language: Haskell2010

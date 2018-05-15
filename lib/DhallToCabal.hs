@@ -350,7 +350,6 @@ dhallToCabal fileName source =
 
 input :: FilePath -> LazyText.Text -> Dhall.Type a -> IO a
 input fileName source t = do
-
   expr  <-
     throws ( Dhall.Parser.exprFromText fileName source )
 
