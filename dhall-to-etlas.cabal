@@ -1,6 +1,6 @@
 name: dhall-to-etlas
 version: 1.0.0
-cabal-version: >= 1.10
+cabal-version: 1.12
 build-type: Simple
 license: MIT
 license-file: LICENSE
@@ -9,15 +9,14 @@ homepage: https://github.com/eta-lang/dhall-to-etlas
 bug-reports: https://github.com/eta-lang/dhall-to-etlas/issues
 synopsis: Compile Dhall expressions to Etlas files
 description:
-    dhall-to-etlas takes Dhall expressions and compiles them into Etlas 
+    dhall-to-etlas takes Dhall expressions and compiles them into Etlas
     files. All of the features of Dhall are supported, such as let
-    bindings and imports, and all features of Etlas are supported 
+    bindings and imports, and all features of Etlas are supported
+    (including conditional stanzas).
     .
 category: Distribution
-author: Ollie Charles <ollie@ocharles.org.uk>
 extra-source-files:
     Changelog.md
-    README.md
     dhall/defaults/BuildInfo.dhall
     dhall/defaults/Library.dhall
     dhall/defaults/CompilerOptions.dhall
@@ -74,10 +73,6 @@ extra-source-files:
     dhall/types/VersionRange/MajorBoundVersion.dhall
     dhall/types/VersionRange/UnionVersionRanges.dhall
     dhall/types/SetupBuildInfo.dhall
-    golden-tests/dhall-to-cabal/*.dhall
-    golden-tests/dhall-to-cabal/*.cabal
-    golden-tests/cabal-to-dhall/*.dhall
-    golden-tests/cabal-to-dhall/*.cabal
 
 source-repository head
     type: git
@@ -88,22 +83,21 @@ library
         DhallToCabal
         CabalToDhall
     build-depends:
-        etlas-cabal               >= 1.3.0.0  && < 1.4,
-        base                      >= 4.5      && < 5,
-        bytestring                >= 0.10     && < 1,
-        containers                >= 0.5      && < 0.6,
-        contravariant             >= 1.4      && < 1.5,
-        dhall                     >= 1.13.0   && < 1.14,
-        formatting                >= 6.3.1    && < 6.4,
-        hashable                  >= 1.2.6.1  && < 1.3,
-        insert-ordered-containers >= 0.2.1.0  && < 0.3,
-        text                      >= 1.2      && < 1.3,
-        transformers              >= 0.2.0.0  && < 0.6,
-        megaparsec                >= 6.1.1    && < 6.5 ,
-        vector                    >= 0.11.0.0 && < 0.13
+        etlas-cabal >=1.3.0.0 && <1.4,
+        base >=4.5 && <5,
+        bytestring >=0.10 && <1,
+        containers >=0.5 && <0.6,
+        contravariant >=1.4 && <1.5,
+        dhall >=1.13.0 && <1.14,
+        formatting >=6.3.1 && <6.4,
+        hashable >=1.2.6.1 && <1.3,
+        insert-ordered-containers >=0.2.1.0 && <0.3,
+        text >=1.2 && <1.3,
+        transformers >=0.2.0.0 && <0.6,
+        vector >=0.11.0.0 && <0.13
     default-language: Haskell2010
-    other-extensions: GADTs GeneralizedNewtypeDeriving
-                      LambdaCase OverloadedStrings RecordWildCards
+    other-extensions: GADTs GeneralizedNewtypeDeriving LambdaCase
+                      OverloadedStrings RecordWildCards
     hs-source-dirs: lib
     other-modules:
         DhallToCabal.ConfigTree
@@ -114,14 +108,14 @@ library
 executable  dhall-to-etlas
     main-is: Main.hs
     build-depends:
-        etlas-cabal               >= 1.3.0.0 && < 1.4,
-        base                      >= 4.5     && < 5,
-        dhall                     >= 1.13.0  && < 1.14,
-        dhall-to-etlas            -any,
-        optparse-applicative      >= 0.13.2  && < 0.15,
-        prettyprinter             >= 1.2.0.1 && < 1.3,
-        text                      >= 1.2     && < 1.3,
-        transformers              >= 0.2.0.0 && < 0.6
+        etlas-cabal >=1.3.0.0 && <1.4,
+        base >=4.5 && <5,
+        dhall >=1.13.0 && <1.14,
+        dhall-to-etlas -any,
+        optparse-applicative >=0.13.2 && <0.15,
+        prettyprinter >=1.2.0.1 && <1.3,
+        text >=1.2 && <1.3,
+        transformers >=0.2.0.0 && <0.6
     default-language: Haskell2010
     other-extensions: NamedFieldPuns
     hs-source-dirs: exe
@@ -129,16 +123,10 @@ executable  dhall-to-etlas
 executable  etlas-to-dhall
     main-is: Main.hs
     build-depends:
-        etlas-cabal               >= 1.3.0.0 && < 1.4,
-        base                      >= 4.5     && < 5,
-        dhall                     >= 1.13.0  && < 1.14,
-        dhall-to-etlas            -any,
-        optparse-applicative      >= 0.13.2  && < 0.15,
-        prettyprinter             >= 1.2.0.1 && < 1.3,
-        text                      >= 1.2     && < 1.3,
-        contravariant             >= 1.4     && < 1.5,
-        hashable                  >= 1.2.6.1 && < 1.3,
-        insert-ordered-containers >= 0.2.1.0 && < 0.3
+        base >=4.5 && <5,
+        dhall-to-etlas -any,
+        optparse-applicative >=0.13.2 && <0.15,
+        text >=1.2 && <1.3
     default-language: Haskell2010
     other-extensions: NamedFieldPuns
     hs-source-dirs: cabal-to-dhall
@@ -147,15 +135,15 @@ test-suite  golden-tests
     type: exitcode-stdio-1.0
     main-is: GoldenTests.hs
     build-depends:
-        etlas-cabal               >= 1.3.0.0 && < 1.4,
-        base                      >= 4.5     && < 5,
-        Diff                      >= 0.3.4   && < 0.4,
-        bytestring                >= 0.10    && < 1,
-        dhall-to-etlas            -any,
-        filepath                  >=1.4      && < 1.5,
-        tasty                     >=0.11     && < 0.12,
-        tasty-golden              >=2.3      && < 2.4,
-        text                      >=1.2      && < 1.3
+        etlas-cabal >=1.3.0.0 && <1.4,
+        base >=4.5 && <5,
+        Diff >=0.3.4 && <0.4,
+        bytestring >=0.10 && <1,
+        dhall-to-etlas -any,
+        filepath >=1.4 && <1.5,
+        tasty >=0.11 && <1.2,
+        tasty-golden >=2.3 && <2.4,
+        text >=1.2 && <1.3
     default-language: Haskell2010
     hs-source-dirs: golden-tests
 
