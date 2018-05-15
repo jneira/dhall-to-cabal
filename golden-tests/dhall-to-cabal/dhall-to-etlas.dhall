@@ -27,8 +27,10 @@ in let deps =
              pkgVer "bytestring"     "0.10"     "1"
          , containers =
              pkgVer "containers"     "0.5"      "0.6"
+         , contravariant =
+             pkgVer "contravariant"  "1.4"      "1.5"
          , dhall =
-             pkgVer "dhall"          "1.12.0"   "1.13"
+             pkgVer "dhall"          "1.13.0"   "1.14"
          , dhall-to-etlas =
              pkg    "dhall-to-etlas" prelude.anyVersion
          , optparse =
@@ -47,8 +49,6 @@ in let deps =
          , insert-ordered-containers =
              pkgVer "insert-ordered-containers"
                                      "0.2.1.0"  "0.3"
-         , megaparsec =
-             pkgVer "megaparsec"     "6.1.1"    "6.5"
          , vector =
              pkgVer "vector"         "0.11.0.0" "0.13"
          , contravariant =
@@ -58,7 +58,7 @@ in let deps =
 	 , filepath =
              pkgVer "filepath"       "1.4"      "1.5"
          , tasty =
-             pkgVer "tasty"          "0.11"     "0.12"
+             pkgVer "tasty"          "0.11"     "1.2"
          , tasty-golden =
              pkgVer "tasty-golden"   "2.3"      "2.4"
          }
@@ -144,7 +144,7 @@ in  prelude.utils.GitHub-project
     , version =
         v "1.0.0"
     , cabal-version =
-        v "1.10"
+        v "1.12"
     , library =
 	prelude.unconditional.library
         (   prelude.defaults.Library
@@ -153,20 +153,20 @@ in  prelude.utils.GitHub-project
                 , deps.base
 		, deps.bytestring
                 , deps.containers
+                , deps.contravariant
                 , deps.dhall
                 , deps.formatting
                 , deps.hashable
                 , deps.insert-ordered-containers
                 , deps.text
                 , deps.transformers
-                , deps.megaparsec
                 , deps.vector
                 ]
             , compiler-options =
                   prelude.defaults.CompilerOptions
                // { GHC = [ "-Wall" ] }
             , exposed-modules =
-                [ "DhallToCabal" ]
+                [ "DhallToCabal", "CabalToDhall" ]
             , hs-source-dirs =
                 [ "lib" ]
             , other-extensions =
@@ -213,16 +213,10 @@ in  prelude.utils.GitHub-project
           "etlas-to-dhall"
           (   prelude.defaults.Executable
            // { build-depends =
-                  [ deps.etlas-cabal
-                  , deps.base
-                  , deps.dhall
+                  [ deps.base
                   , deps.dhall-to-etlas
                   , deps.optparse
-                  , deps.prettyprinter
                   , deps.text
-                  , deps.contravariant
-                  , deps.hashable
-                  , deps.insert-ordered-containers
                   ]
               , hs-source-dirs =
                   [ "cabal-to-dhall" ]
@@ -240,8 +234,8 @@ in  prelude.utils.GitHub-project
               "golden-tests"
               (   prelude.defaults.TestSuite
                // { build-depends =
-	              [ deps.base
-                      , deps.etlas-cabal
+	              [ deps.etlas-cabal
+                      , deps.base
                       , deps.Diff
                       , deps.bytestring
                       , deps.dhall-to-etlas
