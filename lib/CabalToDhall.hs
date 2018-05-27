@@ -10,7 +10,7 @@ module CabalToDhall ( cabalToDhall ) where
 import Control.Monad ( join )
 import Data.Foldable ( foldMap )
 import Data.Functor.Contravariant ( (>$<), Contravariant( contramap ) )
-import Data.Monoid ( First(..), (<>) )
+import Data.Monoid ( First(..) )
 import GHC.Stack
 import Numeric.Natural ( Natural )
 
@@ -60,38 +60,49 @@ import qualified Distribution.Version as Cabal
 import qualified Language.Haskell.Extension as Cabal
 
 import DhallToCabal ( sortExpr )
+import DhallToCabal.ConfigTree ( ConfigTree(..) )
 
 
-preludeLocation :: Dhall.Core.Path
+preludeLocation :: Dhall.Core.Import
 preludeLocation =
-  Dhall.Core.Path
-    { Dhall.Core.pathHashed =
-        Dhall.Core.PathHashed
+  Dhall.Core.Import
+    { Dhall.Core.importHashed =
+        Dhall.Core.ImportHashed
           { Dhall.Core.hash =
               Nothing
-          , Dhall.Core.pathType =
+          , Dhall.Core.importType =
               Dhall.Core.URL
-                "https://raw.githubusercontent.com/dhall-lang/dhall-to-cabal/1.0.0/dhall/prelude.dhall"
+                "https://raw.githubusercontent.com"
+                ( Dhall.Core.File
+                   ( Dhall.Core.Directory [ "dhall", "1.0.0", "dhall-to-cabal", "dhall-lang" ] )
+                   "prelude.dhall"
+                )
+                ""
                 Nothing
           }
-    , Dhall.Core.pathMode =
+    , Dhall.Core.importMode =
         Dhall.Core.Code
     }
 
 
-typesLocation :: Dhall.Core.Path
+typesLocation :: Dhall.Core.Import
 typesLocation =
-  Dhall.Core.Path
-    { Dhall.Core.pathHashed =
-        Dhall.Core.PathHashed
+  Dhall.Core.Import
+    { Dhall.Core.importHashed =
+        Dhall.Core.ImportHashed
           { Dhall.Core.hash =
               Nothing
-          , Dhall.Core.pathType =
+          , Dhall.Core.importType =
               Dhall.Core.URL
-                "https://raw.githubusercontent.com/dhall-lang/dhall-to-cabal/1.0.0/dhall/types.dhall"
+                "https://raw.githubusercontent.com"
+                ( Dhall.Core.File
+                   ( Dhall.Core.Directory [ "dhall", "1.0.0", "dhall-to-cabal", "dhall-lang" ] )
+                   "types.dhall"
+                )
+                ""
                 Nothing
           }
-    , Dhall.Core.pathMode =
+    , Dhall.Core.importMode =
         Dhall.Core.Code
     }
 
@@ -100,7 +111,7 @@ type DhallExpr =
   Dhall.Core.Expr Dhall.Parser.Src Dhall.TypeCheck.X
 
 
-cabalToDhall :: LazyText.Text -> IO LazyText.Text
+cabalToDhall :: LazyText.Text -> IO ( Expr.Expr Dhall.Parser.Src Dhall.Core.Import )
 cabalToDhall source =
   case Cabal.parseGenericPackageDescription ( LazyText.unpack source ) of
     Cabal.ParseFailed e -> do
@@ -119,7 +130,7 @@ cabalToDhall source =
                   genericPackageDescription
               )
 
-      return ( Dhall.Core.pretty dhall )
+      return dhall
 
 
 newtype RecordInputType a =
@@ -698,62 +709,27 @@ library =
     }
 
 
-data CondIfTree v a
-  = Val a
-  | If v ( CondIfTree v a ) ( CondIfTree v a )
-  deriving (Eq, Show)
-
-
 unifyCondTree
-  :: ( Monoid a, Monoid x )
+  :: ( Monoid a )
   => Cabal.CondTree v x a
-  -> CondIfTree ( Cabal.Condition v ) a
+  -> ConfigTree ( Cabal.Condition v ) a
 unifyCondTree =
   let
-    go acc condTree =
-      case Cabal.condTreeComponents condTree of
-        [] ->
-          Val ( acc <> Cabal.condTreeData condTree )
+    branch
+      :: ( Monoid a )
+      => Cabal.CondBranch v x a
+      -> ConfigTree ( Cabal.Condition v ) a
+    branch ( Cabal.CondBranch cond true false ) =
+      Branch cond ( tree true ) ( maybe mempty tree false )
 
-        [c] ->
-          If
-            ( Cabal.condBranchCondition c )
-            ( go
-                ( acc <> Cabal.condTreeData condTree )
-                ( Cabal.condBranchIfTrue c )
-            )
-            ( go
-                ( acc <> Cabal.condTreeData condTree )
-                ( case Cabal.condBranchIfFalse c of
-                    Nothing ->
-                      Cabal.CondNode mempty mempty mempty
-
-                    Just c ->
-                      c
-                )
-            )
-
-        (c:cs) ->
-          go acc ( condTree { Cabal.condTreeComponents = pushDownBranch c <$> cs } )
-
-    pushDownBranch a b =
-      b
-        { Cabal.condBranchIfTrue =
-            pushDownTree a ( Cabal.condBranchIfTrue b )
-        , Cabal.condBranchIfFalse =
-            case Cabal.condBranchIfFalse b of
-              Nothing ->
-                Just ( Cabal.CondNode mempty mempty [a] )
-
-              Just tree ->
-                Just ( pushDownTree a tree )
-        }
-
-    pushDownTree a b =
-      b { Cabal.condTreeComponents = a : Cabal.condTreeComponents b }
-
+    tree
+      :: ( Monoid a )
+      => Cabal.CondTree v x a
+      -> ConfigTree ( Cabal.Condition v ) a
+    tree ( Cabal.CondNode acc _ branches) =
+      return acc `mappend` foldMap branch branches
   in
-  go mempty
+  tree
 
 
 condTree
@@ -763,10 +739,10 @@ condTree
 condTree t =
   let
     go = \case
-      Val a ->
+      Leaf a ->
         Dhall.embed t a
 
-      If cond a b ->
+      Branch cond a b ->
         Expr.BoolIf
           ( Dhall.embed condBranchCondition cond )
           ( go a )

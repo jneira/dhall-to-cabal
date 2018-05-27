@@ -30,7 +30,7 @@ in let deps =
          , contravariant =
              pkgVer "contravariant"  "1.4"      "1.5"
          , dhall =
-             pkgVer "dhall"          "1.13.0"   "1.14"
+             pkgVer "dhall"          "1.14.0"   "1.15"
          , dhall-to-etlas =
              pkg    "dhall-to-etlas" prelude.anyVersion
          , optparse =
@@ -55,7 +55,7 @@ in let deps =
              pkgVer "contravariant"  "1.4"      "1.5"
          , Diff =
              pkgVer "Diff"           "0.3.4"    "0.4"
-	 , filepath =
+         , filepath =
              pkgVer "filepath"       "1.4"      "1.5"
          , tasty =
              pkgVer "tasty"          "0.11"     "1.2"
@@ -216,6 +216,7 @@ in  prelude.utils.GitHub-project
                   [ deps.base
                   , deps.dhall-to-etlas
                   , deps.optparse
+                  , deps.prettyprinter
                   , deps.text
                   ]
               , hs-source-dirs =
@@ -238,6 +239,7 @@ in  prelude.utils.GitHub-project
                       , deps.base
                       , deps.Diff
                       , deps.bytestring
+                      , deps.dhall
                       , deps.dhall-to-etlas
                       , deps.filepath
                       , deps.tasty
