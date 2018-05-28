@@ -61,6 +61,8 @@ in let deps =
              pkgVer "tasty"          "0.11"     "1.2"
          , tasty-golden =
              pkgVer "tasty-golden"   "2.3"      "2.4"
+         , semigroups =
+             pkgVer "semigroups"     "0.18.0"   "0.19"
          }
 
 in  prelude.utils.GitHub-project
@@ -161,6 +163,7 @@ in  prelude.utils.GitHub-project
                 , deps.text
                 , deps.transformers
                 , deps.vector
+                , deps.semigroups
                 ]
             , compiler-options =
                   prelude.defaults.CompilerOptions
