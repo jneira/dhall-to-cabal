@@ -124,6 +124,7 @@ executable  dhall-to-etlas
         base >=4.5 && <5,
         dhall >=1.14.0 && <1.15,
         dhall-to-etlas -any,
+        insert-ordered-containers >=0.2.1.0 && <0.3,          
         optparse-applicative >=0.13.2 && <0.15,
         prettyprinter >=1.2.0.1 && <1.3,
         text >=1.2 && <1.3,
@@ -137,6 +138,7 @@ executable  etlas-to-dhall
     scope: public
     build-depends:
         base >=4.5 && <5,
+        dhall >=1.14.0 && <1.15,
         dhall-to-etlas -any,
         optparse-applicative >=0.13.2 && <0.15,
         prettyprinter >=1.2.0.1 && <1.3,
@@ -144,6 +146,8 @@ executable  etlas-to-dhall
     default-language: Haskell2010
     other-extensions: NamedFieldPuns
     hs-source-dirs: cabal-to-dhall
+    other-modules:
+        Paths_dhall_to_cabal
 
 test-suite  golden-tests
     type: exitcode-stdio-1.0

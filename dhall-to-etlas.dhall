@@ -197,6 +197,7 @@ in  prelude.utils.GitHub-project
                   , deps.base
                   , deps.dhall
                   , deps.dhall-to-etlas
+                  , deps.insert-ordered-containers
                   , deps.optparse
                   , deps.prettyprinter
                   , deps.text
@@ -217,6 +218,7 @@ in  prelude.utils.GitHub-project
           (   prelude.defaults.Executable
            // { build-depends =
                   [ deps.base
+                  , deps.dhall
                   , deps.dhall-to-etlas
                   , deps.optparse
                   , deps.prettyprinter
@@ -228,6 +230,8 @@ in  prelude.utils.GitHub-project
                   "Main.hs"
               , other-extensions =
                   [ prelude.types.Extensions.NamedFieldPuns True ]
+              , other-modules =
+                  [ "Paths_dhall_to_etlas" ]
               , default-language =
                   Haskell2010
               }
@@ -238,8 +242,8 @@ in  prelude.utils.GitHub-project
               "golden-tests"
               (   prelude.defaults.TestSuite
                // { build-depends =
-	              [ deps.etlas-cabal
-                      , deps.base
+	              [ deps.base
+                      , deps.etlas-cabal
                       , deps.Diff
                       , deps.bytestring
                       , deps.dhall

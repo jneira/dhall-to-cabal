@@ -30,6 +30,7 @@ module DhallToCabal
   , versionRange
   , version
   , configRecordType
+  , buildInfoType
 
   , sortExpr
   ) where
@@ -228,6 +229,10 @@ buildInfo = Cabal.BuildInfo
   <*> keyValue "build-depends" ( Dhall.list dependency )
   <*> keyValue "mixins" ( Dhall.list mixin )
 
+
+buildInfoType :: Expr.Expr Dhall.Parser.Src Dhall.TypeCheck.X
+buildInfoType =
+  Dhall.expected ( makeRecord buildInfo )
 
 
 testSuite :: Dhall.Type Cabal.TestSuite
