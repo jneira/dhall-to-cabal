@@ -16,8 +16,15 @@ in let etaImpl =
        \ ( cfg : types.Config ) -> \ ( ver : types.VersionRange )
     -> cfg.impl ( prelude.types.Compilers.Eta {=} ) ver
 
-in let GitHub-project = prelude.utils.GitHub-project
-                        { owner = "jneira" , repo = "wai-servlet" }
+in let RepoKind = constructors types.RepoKind
+
+in let GitHub-project = prelude.utils.GitHubWithSourceRepo-project
+                        ( prelude.defaults.SourceRepo
+                       // { tag = ["0.1.5.0"] : Optional Text
+                          , kind = RepoKind.RepoThis {=}
+                          }
+                         )
+                         { owner = "jneira" , repo = "wai-servlet" }
 in  GitHub-project
  // { description =
         "Integration of eta wai applications with the servlet api"
