@@ -19,17 +19,17 @@ in let etaImpl =
 in let RepoKind = constructors types.RepoKind
 
 in let GitHub-project = prelude.utils.GitHubWithSourceRepo-project
-                        ( prelude.defaults.SourceRepo
-                       // { tag = ["0.1.5.0"] : Optional Text
-                          , kind = RepoKind.RepoThis {=}
-                          }
+                        (   prelude.defaults.SourceRepo
+                         // { tag = ["0.1.5.0"] : Optional Text
+                            , kind = RepoKind.RepoThis {=}
+                            }
                          )
-                         { owner = "jneira" , repo = "wai-servlet" }
+                         { owner = "jneira"
+                         , repo = "wai-servlet"
+                         }
 in  GitHub-project
  // { description =
         "Integration of eta wai applications with the servlet api"
-    , stability =
-        "Experimental"
     , license =
          prelude.types.Licenses.BSD3 {=}
     , license-files =

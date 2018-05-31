@@ -30,7 +30,6 @@ library
                      , Network.Wai.Servlet.File
                      , Network.Wai.Servlet.Settings
                      , Javax.Servlet
-  -- other-extensions:
   build-depends:       base >= 4.8 && < 4.9
                      , wai
                      , network

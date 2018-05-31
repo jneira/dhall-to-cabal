@@ -148,12 +148,12 @@ in  prelude.utils.GitHub-project
     , cabal-version =
         v "1.12"
     , library =
-	prelude.unconditional.library
+        prelude.unconditional.library
         (   prelude.defaults.Library
          // { build-depends =
                 [ deps.etlas-cabal
                 , deps.base
-		, deps.bytestring
+        	, deps.bytestring
                 , deps.containers
                 , deps.contravariant
                 , deps.dhall
