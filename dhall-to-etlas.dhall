@@ -33,7 +33,7 @@ in let deps =
              pkgVer "dhall"          "1.14.0"   "1.15"
          , dhall-to-etlas =
              pkg    "dhall-to-etlas" prelude.anyVersion
-         , optparse =
+         , optparse-applicative =
              pkgVer "optparse-applicative"
                                      "0.13.2"   "0.15"
          , prettyprinter =
@@ -65,6 +65,19 @@ in let deps =
              pkgVer "semigroups"     "0.18.0"   "0.19"
          }
 
+in let warning-options =
+         [ "-Weverything"
+         , "-Wno-safe"
+         , "-Wno-unsafe"
+         , "-Wno-implicit-prelude"
+         , "-Wno-missed-specialisations"
+         , "-Wno-all-missed-specialisations"
+         , "-Wno-missing-import-lists"
+         , "-Wno-missing-local-signatures"
+         , "-Wno-monomorphism-restriction"
+         , "-fno-warn-name-shadowing"
+         ]
+
 in  prelude.utils.GitHub-project
     { owner = "eta-lang" , repo = "dhall-to-etlas" }
  // { synopsis =
@@ -80,8 +93,11 @@ in  prelude.utils.GitHub-project
         "Distribution"
     , maintainer =
         "atreyu.bbb@gmail.com"
+    , author =
+        "Ollie Charles <ollie@ocharles.org.uk>"
     , extra-source-files =
         [ "Changelog.md"
+        , "README.md"
         , "dhall/defaults/BuildInfo.dhall"
         , "dhall/defaults/Library.dhall"
         , "dhall/defaults/CompilerOptions.dhall"
@@ -138,13 +154,26 @@ in  prelude.utils.GitHub-project
         , "dhall/types/VersionRange/MajorBoundVersion.dhall"
         , "dhall/types/VersionRange/UnionVersionRanges.dhall"
         , "dhall/types/SetupBuildInfo.dhall"
-        ]
+        , "dhall/types/SPDX.dhall"
+        , "dhall/types/SPDX/License.dhall"
+        , "dhall/types/SPDX/LicenseVersionOrLater.dhall"
+        , "dhall/types/SPDX/Ref.dhall"
+        , "dhall/types/SPDX/RefWithFile.dhall"
+        , "dhall/types/SPDX/And.dhall"
+        , "dhall/types/SPDX/Or.dhall"
+        , "dhall/types/SPDX/LicenseExceptionId.dhall"
+        , "dhall/types/SPDX/LicenseId.dhall"
+        , "golden-tests/dhall-to-cabal/*.dhall"
+        , "golden-tests/dhall-to-cabal/*.cabal"
+        , "golden-tests/cabal-to-dhall/*.dhall"
+        , "golden-tests/cabal-to-dhall/*.cabal"
+        ] 
     , license =
         prelude.types.Licenses.MIT {=}
     , license-files =
         [ "LICENSE" ]
     , version =
-        v "1.0.0"
+        v "1.1.0.0"
     , cabal-version =
         v "1.12"
     , library =
@@ -167,9 +196,9 @@ in  prelude.utils.GitHub-project
                 ]
             , compiler-options =
                   prelude.defaults.CompilerOptions
-               // { GHC = [ "-Wall" ] }
+               // { GHC = warning-options }
             , exposed-modules =
-                [ "DhallToCabal", "CabalToDhall" ]
+                [ "DhallToCabal", "DhallLocation", "CabalToDhall" ]
             , hs-source-dirs =
                 [ "lib" ]
             , other-extensions =
@@ -183,6 +212,7 @@ in  prelude.utils.GitHub-project
                 [ "DhallToCabal.ConfigTree"
                 , "DhallToCabal.Diff"
                 , "Dhall.Extra"
+                , "Paths_dhall_to_etlas"
                 ]
             , default-language =
                 Haskell2010
@@ -198,11 +228,14 @@ in  prelude.utils.GitHub-project
                   , deps.dhall
                   , deps.dhall-to-etlas
                   , deps.insert-ordered-containers
-                  , deps.optparse
+                  , deps.optparse-applicative
                   , deps.prettyprinter
                   , deps.text
                   , deps.transformers
                   ]
+              , compiler-options =
+                      prelude.defaults.CompilerOptions
+                    ⫽ { GHC = warning-options }
               , hs-source-dirs =
                   [ "exe" ]
               , main-is =
@@ -220,10 +253,13 @@ in  prelude.utils.GitHub-project
                   [ deps.base
                   , deps.dhall
                   , deps.dhall-to-etlas
-                  , deps.optparse
+                  , deps.optparse-applicative
                   , deps.prettyprinter
                   , deps.text
                   ]
+              , compiler-options =
+                      prelude.defaults.CompilerOptions
+                    ⫽ { GHC = warning-options }
               , hs-source-dirs =
                   [ "cabal-to-dhall" ]
               , main-is =
@@ -254,6 +290,9 @@ in  prelude.utils.GitHub-project
                       , deps.tasty-golden
                       , deps.text
                       ]
+                  , compiler-options =
+                      prelude.defaults.CompilerOptions
+                    ⫽ { GHC = warning-options }
                   , hs-source-dirs =
                       [ "golden-tests" ]
                   , type =

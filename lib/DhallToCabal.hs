@@ -22,6 +22,9 @@ module DhallToCabal
   , compilerFlavor
   , language
   , license
+--  , spdxLicense
+--  , spdxLicenseId
+--  , spdxLicenseExceptionId
   , executable
   , testSuite
   , benchmark
@@ -41,13 +44,9 @@ import Data.Maybe ( fromMaybe )
 import Data.Monoid ( (<>) )
 import Formatting.Buildable ( Buildable(..) )
 
-import qualified Data.ByteString.Lazy as LazyByteString
 import qualified Data.HashMap.Strict.InsOrd as Map
-import qualified Data.Text as StrictText
-import qualified Data.Text.Encoding as StrictText
 import qualified Data.Text.Lazy as LazyText
 import qualified Data.Text.Lazy.Builder as Builder
-import qualified Data.Text.Lazy.Encoding as LazyText
 import qualified Dhall
 import qualified Dhall.Core
 import qualified Dhall.Import
@@ -57,6 +56,7 @@ import qualified Distribution.Compiler as Cabal
 import qualified Distribution.License as Cabal
 import qualified Distribution.ModuleName as Cabal
 import qualified Distribution.PackageDescription as Cabal
+-- import qualified Distribution.SPDX as SPDX
 import qualified Distribution.System as Cabal ( Arch(..), OS(..) )
 import qualified Distribution.Text as Cabal ( simpleParse )
 import qualified Distribution.Types.CondTree as Cabal
@@ -118,7 +118,7 @@ packageDescription =
   <*> keyValue "category" Dhall.string
   <*> keyValue "x-fields"
       ( Dhall.list ( Dhall.pair Dhall.string Dhall.string ) )
-    -- Cabal documentation states
+  -- Cabal documentation states
   --
   --   > YOU PROBABLY DON'T WANT TO USE THIS FIELD.
   --
@@ -406,6 +406,7 @@ pattern LamArr a b <- Expr.Lam _ a b
 
 
 
+pattern V0 :: Dhall.Text -> Expr.Expr s a
 pattern V0 v = Expr.Var ( Expr.V v 0 )
 
 
@@ -511,7 +512,6 @@ buildType =
   sortType Dhall.genericAuto
 
 
-
 license :: Dhall.Type Cabal.License
 license =
   makeUnion
@@ -533,6 +533,119 @@ license =
         ]
     )
 
+{--
+license :: Dhall.Type (Either SPDX.License Cabal.License)
+license =
+  makeUnion
+    ( Map.fromList
+        [ ( "GPL", Right . Cabal.GPL <$> Dhall.maybe version )
+        , ( "AGPL", Right . Cabal.AGPL <$> Dhall.maybe version )
+        , ( "LGPL", Right . Cabal.LGPL <$> Dhall.maybe version )
+        , ( "BSD2", Right Cabal.BSD2 <$ Dhall.unit )
+        , ( "BSD3", Right Cabal.BSD3 <$ Dhall.unit )
+        , ( "BSD4", Right Cabal.BSD4 <$ Dhall.unit )
+        , ( "MIT", Right Cabal.MIT <$ Dhall.unit )
+        , ( "ISC", Right Cabal.ISC <$ Dhall.unit )
+        , ( "MPL", Right . Cabal.MPL <$> version )
+        , ( "Apache", Right . Cabal.Apache <$> Dhall.maybe version )
+        , ( "PublicDomain", Right Cabal.PublicDomain <$ Dhall.unit )
+        , ( "AllRightsReserved", Right Cabal.AllRightsReserved<$ Dhall.unit )
+        , ( "Unspecified", Right Cabal.UnspecifiedLicense <$ Dhall.unit )
+        , ( "Other", Right Cabal.OtherLicense <$ Dhall.unit )
+        , ( "SPDX", Left . SPDX.License <$> spdxLicense )
+        ]
+    )
+
+
+spdxLicense :: Dhall.Type SPDX.LicenseExpression
+spdxLicense =
+  let
+    extract =
+      \case
+        LamArr _spdx (LamArr _licenseExactVersion (LamArr _licenseVersionOrLater (LamArr _licenseRef (LamArr _licenseRefWithFile (LamArr _licenseAnd (LamArr _licenseOr license)))))) ->
+          go license
+
+        _ ->
+          Nothing
+
+    go =
+      \case
+        Expr.App ( Expr.App ( V0 "license" ) identM ) exceptionMayM -> do
+          ident <- Dhall.extract spdxLicenseId identM
+          exceptionMay <- Dhall.extract ( Dhall.maybe spdxLicenseExceptionId ) exceptionMayM
+          return ( SPDX.ELicense ( SPDX.ELicenseId ident ) exceptionMay )
+
+        Expr.App ( Expr.App ( V0 "licenseVersionOrLater" ) identM ) exceptionMayM -> do          
+          ident <- Dhall.extract spdxLicenseId identM
+          exceptionMay <- Dhall.extract ( Dhall.maybe spdxLicenseExceptionId ) exceptionMayM
+          return ( SPDX.ELicense ( SPDX.ELicenseIdPlus ident ) exceptionMay )
+
+        Expr.App ( Expr.App ( V0 "ref" ) identM ) exceptionMayM -> do
+          ident <- Dhall.extract Dhall.string identM
+          exceptionMay <- Dhall.extract ( Dhall.maybe spdxLicenseExceptionId ) exceptionMayM
+          return ( SPDX.ELicense ( SPDX.ELicenseRef ( SPDX.mkLicenseRef' Nothing ident ) ) exceptionMay )
+
+        Expr.App ( Expr.App ( Expr.App ( V0 "refWithFile" ) identM ) filenameM) exceptionMayM -> do
+          ident <- Dhall.extract Dhall.string identM
+          filename <- Dhall.extract Dhall.string filenameM
+          exceptionMay <- Dhall.extract ( Dhall.maybe spdxLicenseExceptionId ) exceptionMayM
+          return ( SPDX.ELicense ( SPDX.ELicenseRef ( SPDX.mkLicenseRef' ( Just filename ) ident ) ) exceptionMay )
+
+        Expr.App ( Expr.App ( V0 "and" ) a ) b ->
+          SPDX.EAnd <$> go a <*> go b
+
+        Expr.App ( Expr.App ( V0 "or" ) a ) b ->
+          SPDX.EOr <$> go a <*> go b
+
+        _ ->
+          Nothing
+
+    expected =
+      let
+        licenseType =
+          V0 "SPDX"
+
+        licenseIdAndException
+          = Expr.Pi "id" ( Dhall.expected spdxLicenseId )
+          $ Expr.Pi "exception" ( Dhall.expected ( Dhall.maybe spdxLicenseExceptionId ) )
+          $ licenseType
+
+        licenseRef
+          = Expr.Pi "ref" ( Dhall.expected Dhall.string )
+          $ Expr.Pi "exception" ( Dhall.expected ( Dhall.maybe spdxLicenseExceptionId ) )
+          $ licenseType
+
+        licenseRefWithFile
+          = Expr.Pi "ref" ( Dhall.expected Dhall.string )
+          $ Expr.Pi "file" ( Dhall.expected Dhall.string )
+          $ Expr.Pi "exception" ( Dhall.expected ( Dhall.maybe spdxLicenseExceptionId ) )
+          $ licenseType
+
+        combine =
+          Expr.Pi "_" licenseType ( Expr.Pi "_" licenseType licenseType )
+
+      in
+      Expr.Pi "SPDX" ( Expr.Const Expr.Type )
+        $ Expr.Pi "license" licenseIdAndException
+        $ Expr.Pi "licenseVersionOrLater" licenseIdAndException
+        $ Expr.Pi "ref" licenseRef
+        $ Expr.Pi "refWithFile" licenseRefWithFile
+        $ Expr.Pi "and" combine
+        $ Expr.Pi "or" combine
+        $ licenseType
+
+  in Dhall.Type { .. }
+
+
+
+spdxLicenseId :: Dhall.Type SPDX.LicenseId
+spdxLicenseId = Dhall.genericAuto
+
+
+
+spdxLicenseExceptionId :: Dhall.Type SPDX.LicenseExceptionId
+spdxLicenseExceptionId = Dhall.genericAuto
+--}
 
 
 compiler :: Dhall.Type ( Cabal.CompilerFlavor, Cabal.VersionRange )

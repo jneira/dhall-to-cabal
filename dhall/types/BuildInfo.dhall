@@ -54,8 +54,10 @@
     ./CompilerOptions.dhall 
 , shared-options :
     ./CompilerOptions.dhall 
+, static-options :
+    ./CompilerOptions.dhall 
 , mixins :
-    List ./Mixin.dhall
+    List ./Mixin.dhall 
 , java-sources :
-    List Text 
+    List Text
 }
