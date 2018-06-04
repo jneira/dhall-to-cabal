@@ -37,7 +37,7 @@ dhallFromGitHub =
                     Dhall.Core.URL
                       "https://raw.githubusercontent.com"
                       ( Dhall.Core.File
-                         ( Dhall.Core.Directory [ "dhall", version, "dhall-to-cabal", "dhall-lang" ] )
+                         ( Dhall.Core.Directory [ "dhall", version, "dhall-to-etlas", "eta-lang" ] )
                          "prelude.dhall"
                       )
                       ""
@@ -57,7 +57,7 @@ dhallFromGitHub =
                     Dhall.Core.URL
                       "https://raw.githubusercontent.com"
                       ( Dhall.Core.File
-                         ( Dhall.Core.Directory [ "dhall", version, "dhall-to-cabal", "dhall-lang" ] )
+                         ( Dhall.Core.Directory [ "dhall", version, "dhall-to-etlas", "eta-lang" ] )
                          "types.dhall"
                       )
                       ""

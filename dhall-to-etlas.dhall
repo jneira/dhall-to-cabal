@@ -66,15 +66,13 @@ in let deps =
          }
 
 in let warning-options =
-         [ "-Weverything"
-         , "-Wno-safe"
-         , "-Wno-unsafe"
-         , "-Wno-implicit-prelude"
-         , "-Wno-missed-specialisations"
-         , "-Wno-all-missed-specialisations"
-         , "-Wno-missing-import-lists"
-         , "-Wno-missing-local-signatures"
-         , "-Wno-monomorphism-restriction"
+         [ "-Wall"
+         , "-fno-warn-safe"
+         , "-fno-warn-unsafe"
+         , "-fno-warn-implicit-prelude"
+         , "-fno-warn-missing-import-lists"
+         , "-fno-warn-missing-local-sigs"
+         , "-fno-warn-monomorphism-restriction"
          , "-fno-warn-name-shadowing"
          ]
 

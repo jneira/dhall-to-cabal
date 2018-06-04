@@ -61,8 +61,8 @@
     ./CompilerOptions.dhall 
 , shared-options =
     ./CompilerOptions.dhall 
-, static-options =
-    ./CompilerOptions.dhall 
+-- , static-options =
+--    ./CompilerOptions.dhall 
 , mixins =
     [] : List ../types/Mixin.dhall 
 , java-sources =
