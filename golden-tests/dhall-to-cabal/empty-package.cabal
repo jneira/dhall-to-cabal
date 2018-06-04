@@ -5,4 +5,5 @@ build-type: Simple
 license: UnspecifiedLicense
 
 executable  foo
+    main-is: Main.hs
 
