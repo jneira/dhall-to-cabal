@@ -6,4 +6,6 @@
     {}
 | Simple :
     {}
+| UnknownBuildType :
+    { _1 : Text }
 >
