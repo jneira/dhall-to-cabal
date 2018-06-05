@@ -16,7 +16,7 @@ import qualified Data.Text.Lazy.IO as LazyText
 import qualified Data.Text.Prettyprint.Doc as Pretty
 import qualified Data.Text.Prettyprint.Doc.Render.Text as Pretty
 import qualified Dhall.Core
-import qualified Distribution.PackageDescription.Parsec as Cabal
+import qualified Distribution.PackageDescription.Parse as Cabal
 import qualified Distribution.PackageDescription.PrettyPrint as Cabal
 import qualified Distribution.Verbosity as Cabal
 
@@ -114,7 +114,7 @@ goldenTests = do
              ( takeBaseName cabalFile )
              ( \ ref new -> [ "diff", "-u", ref, new ] )
              dhallFile
-             ( BS.readFile cabalFile >>= cabalToDhall dhallLocation
+             ( LazyText.readFile cabalFile >>= cabalToDhall dhallLocation
                  & fmap ( LazyText.encodeUtf8 . Pretty.renderLazy
                         . Pretty.layoutSmart layoutOpts . Pretty.pretty
                         )
