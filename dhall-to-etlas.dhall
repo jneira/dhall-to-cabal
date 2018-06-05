@@ -239,6 +239,10 @@ in    prelude.utils.GitHub-project
                     "Main.hs"
                 , other-extensions =
                     [ prelude.types.Extensions.NamedFieldPuns True ]
+                , other-modules =
+                    [ "Paths_dhall_to_cabal" ]
+                , autogen-modules =
+                    [ "Paths_dhall_to_cabal" ]
                 , default-language =
                     Haskell2010
                 }
@@ -264,6 +268,8 @@ in    prelude.utils.GitHub-project
                 , other-extensions =
                     [ prelude.types.Extensions.NamedFieldPuns True ]
                 , other-modules =
+                    [ "Paths_dhall_to_etlas" ]
+                , autogen-modules =
                     [ "Paths_dhall_to_etlas" ]
                 , default-language =
                     Haskell2010

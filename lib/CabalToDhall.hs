@@ -18,6 +18,7 @@ import Numeric.Natural ( Natural )
 
 import qualified Data.ByteString as ByteString
 import qualified Data.HashMap.Strict.InsOrd as Map
+import qualified Data.Sequence as Seq
 import qualified Data.Text.Lazy as LazyText
 import qualified Data.Text.Lazy.Builder as Builder
 import qualified Dhall
@@ -72,6 +73,8 @@ import DhallToCabal.ConfigTree ( ConfigTree(..) )
 type DhallExpr =
   Dhall.Core.Expr Dhall.Parser.Src Dhall.TypeCheck.X
 
+dhallString :: String -> Expr.Expr s a
+dhallString = Expr.TextLit . Dhall.Core.Chunks [] . Builder.fromString
 
 cabalToDhall :: DhallLocation -> LazyText.Text -> IO ( Expr.Expr Dhall.Parser.Src Dhall.Core.Import )
 cabalToDhall dhallLocation source =
@@ -564,12 +567,6 @@ compiler =
     )
 
 
-instance {-# OVERLAPS #-} Dhall.Inject [Char] where
-  injectWith _ = stringToDhall
-
-instance Dhall.Inject Cabal.CompilerFlavor
-
-
 compilerFlavor :: Dhall.InputType Cabal.CompilerFlavor
 compilerFlavor =
   let
@@ -589,7 +586,8 @@ compilerFlavor =
           constructor "HBC" ( Expr.RecordLit mempty )
 
         Cabal.HaskellSuite v ->
-          constructor "HaskellSuite" ( Expr.Record ( Map.singleton "_1" ( Dhall.embed Dhall.inject v ) ) )
+          constructor "HaskellSuite"
+          ( Expr.Record ( Map.singleton "_1" ( dhallString v ) ) )
 
         Cabal.Helium ->
           constructor "Helium" ( Expr.RecordLit mempty )
@@ -607,7 +605,8 @@ compilerFlavor =
           constructor "NHC" ( Expr.RecordLit mempty )
 
         Cabal.OtherCompiler v ->
-          constructor "OtherCompiler" ( Expr.Record ( Map.singleton "_1" ( Dhall.embed Dhall.inject v ) ) )
+          constructor "OtherCompiler"
+          ( Expr.Record ( Map.singleton "_1" ( dhallString v ) ) )
 
         Cabal.UHC ->
           constructor "UHC" ( Expr.RecordLit mempty )
@@ -995,11 +994,7 @@ os =
         Cabal.OtherOS os ->
           Expr.App
             ( Expr.Var "prelude" `Expr.Field` "types" `Expr.Field` "OSs" `Expr.Field` "OtherOS" )
-            ( Expr.RecordLit
-              ( Map.singleton "_1"
-                ( Expr.TextLit ( Dhall.Core.Chunks [] ( Builder.fromString os ) ) )
-              )
-            )
+            ( Expr.RecordLit ( Map.singleton "_1" ( dhallString os ) ) )
 
     , Dhall.declared =
         Expr.Var "prelude" `Expr.Field` "types" `Expr.Field` "OS"
@@ -1195,7 +1190,9 @@ compilerOptions =
                   ( Map.fromList
                       ( map
                           ( \( c, opts ) ->
-                              ( LazyText.pack ( show c ), Dhall.embed Dhall.inject opts )
+                              ( LazyText.pack ( show c )
+                              , Expr.ListLit ( Just Expr.Text ) ( dhallString <$> Seq.fromList opts )
+                              )
                           )
                           xs
                       )
