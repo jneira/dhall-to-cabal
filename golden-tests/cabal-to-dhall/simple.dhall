@@ -1,6 +1,6 @@
     let prelude = ../../dhall/prelude.dhall 
 
-in  let types = ../../dhall/types.dhall
+in  let types = ../../dhall/types.dhall 
 
 in  { author =
         ""
