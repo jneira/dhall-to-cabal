@@ -77,11 +77,7 @@ in  { author =
                                                 )
                                           then        if    config.flag
                                                             "wai-servlet-debug"
-                                                      then  { asm-options =
-                                                                [] : List Text
-                                                            , asm-sources =
-                                                                [] : List Text
-                                                            , autogen-modules =
+                                                      then  { autogen-modules =
                                                                 [] : List Text
                                                             , build-depends =
                                                                 [] : List
@@ -113,10 +109,6 @@ in  { author =
                                                                 ]
                                                             , cc-options =
                                                                 [] : List Text
-                                                            , cmm-options =
-                                                                [] : List Text
-                                                            , cmm-sources =
-                                                                [] : List Text
                                                             , compiler-options =
                                                                 prelude.defaults.CompilerOptions
                                                             , cpp-options =
@@ -124,10 +116,6 @@ in  { author =
                                                                 , "-DPURE_JAVA_WITH"
                                                                 , "-DWAI_SERVLET_DEBUG"
                                                                 ]
-                                                            , cxx-options =
-                                                                [] : List Text
-                                                            , cxx-sources =
-                                                                [] : List Text
                                                             , default-extensions =
                                                                 [] : List
                                                                      types.Extension
@@ -136,15 +124,11 @@ in  { author =
                                                                      types.Language
                                                             , exposed-modules =
                                                                 [] : List Text
-                                                            , extra-bundled-libs =
-                                                                [] : List Text
                                                             , extra-framework-dirs =
                                                                 [] : List Text
                                                             , extra-ghci-libraries =
                                                                 [] : List Text
                                                             , extra-lib-dirs =
-                                                                [] : List Text
-                                                            , extra-lib-flavours =
                                                                 [] : List Text
                                                             , extra-libraries =
                                                                 [] : List Text
@@ -198,17 +182,9 @@ in  { author =
                                                                 prelude.defaults.CompilerOptions
                                                             , signatures =
                                                                 [] : List Text
-                                                            , static-options =
-                                                                prelude.defaults.CompilerOptions
-                                                            , virtual-modules =
-                                                                [] : List Text
                                                             }
                                                 
-                                                else  { asm-options =
-                                                          [] : List Text
-                                                      , asm-sources =
-                                                          [] : List Text
-                                                      , autogen-modules =
+                                                else  { autogen-modules =
                                                           [] : List Text
                                                       , build-depends =
                                                           [] : List
@@ -239,20 +215,12 @@ in  { author =
                                                           [ "java/Utils.java" ]
                                                       , cc-options =
                                                           [] : List Text
-                                                      , cmm-options =
-                                                          [] : List Text
-                                                      , cmm-sources =
-                                                          [] : List Text
                                                       , compiler-options =
                                                           prelude.defaults.CompilerOptions
                                                       , cpp-options =
                                                           [ "-DINTEROP"
                                                           , "-DPURE_JAVA_WITH"
                                                           ]
-                                                      , cxx-options =
-                                                          [] : List Text
-                                                      , cxx-sources =
-                                                          [] : List Text
                                                       , default-extensions =
                                                           [] : List
                                                                types.Extension
@@ -261,15 +229,11 @@ in  { author =
                                                                types.Language
                                                       , exposed-modules =
                                                           [] : List Text
-                                                      , extra-bundled-libs =
-                                                          [] : List Text
                                                       , extra-framework-dirs =
                                                           [] : List Text
                                                       , extra-ghci-libraries =
                                                           [] : List Text
                                                       , extra-lib-dirs =
-                                                          [] : List Text
-                                                      , extra-lib-flavours =
                                                           [] : List Text
                                                       , extra-libraries =
                                                           [] : List Text
@@ -322,19 +286,11 @@ in  { author =
                                                           prelude.defaults.CompilerOptions
                                                       , signatures =
                                                           [] : List Text
-                                                      , static-options =
-                                                          prelude.defaults.CompilerOptions
-                                                      , virtual-modules =
-                                                          [] : List Text
                                                       }
                                     
                                     else  if    config.flag
                                                 "wai-servlet-debug"
-                                          then  { asm-options =
-                                                    [] : List Text
-                                                , asm-sources =
-                                                    [] : List Text
-                                                , autogen-modules =
+                                          then  { autogen-modules =
                                                     [] : List Text
                                                 , build-depends =
                                                     [] : List
@@ -365,10 +321,6 @@ in  { author =
                                                     [] : List Text
                                                 , cc-options =
                                                     [] : List Text
-                                                , cmm-options =
-                                                    [] : List Text
-                                                , cmm-sources =
-                                                    [] : List Text
                                                 , compiler-options =
                                                     prelude.defaults.CompilerOptions
                                                 , cpp-options =
@@ -376,25 +328,17 @@ in  { author =
                                                     , "-DPURE_JAVA_WITH"
                                                     , "-DWAI_SERVLET_DEBUG"
                                                     ]
-                                                , cxx-options =
-                                                    [] : List Text
-                                                , cxx-sources =
-                                                    [] : List Text
                                                 , default-extensions =
                                                     [] : List types.Extension
                                                 , default-language =
                                                     [] : Optional types.Language
                                                 , exposed-modules =
                                                     [] : List Text
-                                                , extra-bundled-libs =
-                                                    [] : List Text
                                                 , extra-framework-dirs =
                                                     [] : List Text
                                                 , extra-ghci-libraries =
                                                     [] : List Text
                                                 , extra-lib-dirs =
-                                                    [] : List Text
-                                                , extra-lib-flavours =
                                                     [] : List Text
                                                 , extra-libraries =
                                                     [] : List Text
@@ -444,17 +388,9 @@ in  { author =
                                                     prelude.defaults.CompilerOptions
                                                 , signatures =
                                                     [] : List Text
-                                                , static-options =
-                                                    prelude.defaults.CompilerOptions
-                                                , virtual-modules =
-                                                    [] : List Text
                                                 }
                                     
-                                    else  { asm-options =
-                                              [] : List Text
-                                          , asm-sources =
-                                              [] : List Text
-                                          , autogen-modules =
+                                    else  { autogen-modules =
                                               [] : List Text
                                           , build-depends =
                                               [] : List
@@ -485,35 +421,23 @@ in  { author =
                                               [] : List Text
                                           , cc-options =
                                               [] : List Text
-                                          , cmm-options =
-                                              [] : List Text
-                                          , cmm-sources =
-                                              [] : List Text
                                           , compiler-options =
                                               prelude.defaults.CompilerOptions
                                           , cpp-options =
                                               [ "-DINTEROP"
                                               , "-DPURE_JAVA_WITH"
                                               ]
-                                          , cxx-options =
-                                              [] : List Text
-                                          , cxx-sources =
-                                              [] : List Text
                                           , default-extensions =
                                               [] : List types.Extension
                                           , default-language =
                                               [] : Optional types.Language
                                           , exposed-modules =
                                               [] : List Text
-                                          , extra-bundled-libs =
-                                              [] : List Text
                                           , extra-framework-dirs =
                                               [] : List Text
                                           , extra-ghci-libraries =
                                               [] : List Text
                                           , extra-lib-dirs =
-                                              [] : List Text
-                                          , extra-lib-flavours =
                                               [] : List Text
                                           , extra-libraries =
                                               [] : List Text
@@ -563,10 +487,6 @@ in  { author =
                                               prelude.defaults.CompilerOptions
                                           , signatures =
                                               [] : List Text
-                                          , static-options =
-                                              prelude.defaults.CompilerOptions
-                                          , virtual-modules =
-                                              [] : List Text
                                           }
                         
                         else  if    config.impl
@@ -577,11 +497,7 @@ in  { author =
                                     )
                               then        if    config.flag
                                                 "wai-servlet-debug"
-                                          then  { asm-options =
-                                                    [] : List Text
-                                                , asm-sources =
-                                                    [] : List Text
-                                                , autogen-modules =
+                                          then  { autogen-modules =
                                                     [] : List Text
                                                 , build-depends =
                                                     [] : List
@@ -612,35 +528,23 @@ in  { author =
                                                     [ "java/Utils.java" ]
                                                 , cc-options =
                                                     [] : List Text
-                                                , cmm-options =
-                                                    [] : List Text
-                                                , cmm-sources =
-                                                    [] : List Text
                                                 , compiler-options =
                                                     prelude.defaults.CompilerOptions
                                                 , cpp-options =
                                                     [ "-DINTEROP"
                                                     , "-DWAI_SERVLET_DEBUG"
                                                     ]
-                                                , cxx-options =
-                                                    [] : List Text
-                                                , cxx-sources =
-                                                    [] : List Text
                                                 , default-extensions =
                                                     [] : List types.Extension
                                                 , default-language =
                                                     [] : Optional types.Language
                                                 , exposed-modules =
                                                     [] : List Text
-                                                , extra-bundled-libs =
-                                                    [] : List Text
                                                 , extra-framework-dirs =
                                                     [] : List Text
                                                 , extra-ghci-libraries =
                                                     [] : List Text
                                                 , extra-lib-dirs =
-                                                    [] : List Text
-                                                , extra-lib-flavours =
                                                     [] : List Text
                                                 , extra-libraries =
                                                     [] : List Text
@@ -690,17 +594,9 @@ in  { author =
                                                     prelude.defaults.CompilerOptions
                                                 , signatures =
                                                     [] : List Text
-                                                , static-options =
-                                                    prelude.defaults.CompilerOptions
-                                                , virtual-modules =
-                                                    [] : List Text
                                                 }
                                     
-                                    else  { asm-options =
-                                              [] : List Text
-                                          , asm-sources =
-                                              [] : List Text
-                                          , autogen-modules =
+                                    else  { autogen-modules =
                                               [] : List Text
                                           , build-depends =
                                               [] : List
@@ -731,33 +627,21 @@ in  { author =
                                               [ "java/Utils.java" ]
                                           , cc-options =
                                               [] : List Text
-                                          , cmm-options =
-                                              [] : List Text
-                                          , cmm-sources =
-                                              [] : List Text
                                           , compiler-options =
                                               prelude.defaults.CompilerOptions
                                           , cpp-options =
                                               [ "-DINTEROP" ]
-                                          , cxx-options =
-                                              [] : List Text
-                                          , cxx-sources =
-                                              [] : List Text
                                           , default-extensions =
                                               [] : List types.Extension
                                           , default-language =
                                               [] : Optional types.Language
                                           , exposed-modules =
                                               [] : List Text
-                                          , extra-bundled-libs =
-                                              [] : List Text
                                           , extra-framework-dirs =
                                               [] : List Text
                                           , extra-ghci-libraries =
                                               [] : List Text
                                           , extra-lib-dirs =
-                                              [] : List Text
-                                          , extra-lib-flavours =
                                               [] : List Text
                                           , extra-libraries =
                                               [] : List Text
@@ -807,18 +691,10 @@ in  { author =
                                               prelude.defaults.CompilerOptions
                                           , signatures =
                                               [] : List Text
-                                          , static-options =
-                                              prelude.defaults.CompilerOptions
-                                          , virtual-modules =
-                                              [] : List Text
                                           }
                         
                         else  if    config.flag "wai-servlet-debug"
-                              then  { asm-options =
-                                        [] : List Text
-                                    , asm-sources =
-                                        [] : List Text
-                                    , autogen-modules =
+                              then  { autogen-modules =
                                         [] : List Text
                                     , build-depends =
                                         [] : List
@@ -849,33 +725,21 @@ in  { author =
                                         [] : List Text
                                     , cc-options =
                                         [] : List Text
-                                    , cmm-options =
-                                        [] : List Text
-                                    , cmm-sources =
-                                        [] : List Text
                                     , compiler-options =
                                         prelude.defaults.CompilerOptions
                                     , cpp-options =
                                         [ "-DINTEROP", "-DWAI_SERVLET_DEBUG" ]
-                                    , cxx-options =
-                                        [] : List Text
-                                    , cxx-sources =
-                                        [] : List Text
                                     , default-extensions =
                                         [] : List types.Extension
                                     , default-language =
                                         [] : Optional types.Language
                                     , exposed-modules =
                                         [] : List Text
-                                    , extra-bundled-libs =
-                                        [] : List Text
                                     , extra-framework-dirs =
                                         [] : List Text
                                     , extra-ghci-libraries =
                                         [] : List Text
                                     , extra-lib-dirs =
-                                        [] : List Text
-                                    , extra-lib-flavours =
                                         [] : List Text
                                     , extra-libraries =
                                         [] : List Text
@@ -925,17 +789,9 @@ in  { author =
                                         prelude.defaults.CompilerOptions
                                     , signatures =
                                         [] : List Text
-                                    , static-options =
-                                        prelude.defaults.CompilerOptions
-                                    , virtual-modules =
-                                        [] : List Text
                                     }
                         
-                        else  { asm-options =
-                                  [] : List Text
-                              , asm-sources =
-                                  [] : List Text
-                              , autogen-modules =
+                        else  { autogen-modules =
                                   [] : List Text
                               , build-depends =
                                   [] : List
@@ -966,33 +822,21 @@ in  { author =
                                   [] : List Text
                               , cc-options =
                                   [] : List Text
-                              , cmm-options =
-                                  [] : List Text
-                              , cmm-sources =
-                                  [] : List Text
                               , compiler-options =
                                   prelude.defaults.CompilerOptions
                               , cpp-options =
                                   [ "-DINTEROP" ]
-                              , cxx-options =
-                                  [] : List Text
-                              , cxx-sources =
-                                  [] : List Text
                               , default-extensions =
                                   [] : List types.Extension
                               , default-language =
                                   [] : Optional types.Language
                               , exposed-modules =
                                   [] : List Text
-                              , extra-bundled-libs =
-                                  [] : List Text
                               , extra-framework-dirs =
                                   [] : List Text
                               , extra-ghci-libraries =
                                   [] : List Text
                               , extra-lib-dirs =
-                                  [] : List Text
-                              , extra-lib-flavours =
                                   [] : List Text
                               , extra-libraries =
                                   [] : List Text
@@ -1041,10 +885,6 @@ in  { author =
                               , shared-options =
                                   prelude.defaults.CompilerOptions
                               , signatures =
-                                  [] : List Text
-                              , static-options =
-                                  prelude.defaults.CompilerOptions
-                              , virtual-modules =
                                   [] : List Text
                               }
             
@@ -1059,11 +899,7 @@ in  { author =
                                     )
                               then        if    config.flag
                                                 "wai-servlet-debug"
-                                          then  { asm-options =
-                                                    [] : List Text
-                                                , asm-sources =
-                                                    [] : List Text
-                                                , autogen-modules =
+                                          then  { autogen-modules =
                                                     [] : List Text
                                                 , build-depends =
                                                     [] : List
@@ -1094,35 +930,23 @@ in  { author =
                                                     [ "java/Utils.java" ]
                                                 , cc-options =
                                                     [] : List Text
-                                                , cmm-options =
-                                                    [] : List Text
-                                                , cmm-sources =
-                                                    [] : List Text
                                                 , compiler-options =
                                                     prelude.defaults.CompilerOptions
                                                 , cpp-options =
                                                     [ "-DPURE_JAVA_WITH"
                                                     , "-DWAI_SERVLET_DEBUG"
                                                     ]
-                                                , cxx-options =
-                                                    [] : List Text
-                                                , cxx-sources =
-                                                    [] : List Text
                                                 , default-extensions =
                                                     [] : List types.Extension
                                                 , default-language =
                                                     [] : Optional types.Language
                                                 , exposed-modules =
                                                     [] : List Text
-                                                , extra-bundled-libs =
-                                                    [] : List Text
                                                 , extra-framework-dirs =
                                                     [] : List Text
                                                 , extra-ghci-libraries =
                                                     [] : List Text
                                                 , extra-lib-dirs =
-                                                    [] : List Text
-                                                , extra-lib-flavours =
                                                     [] : List Text
                                                 , extra-libraries =
                                                     [] : List Text
@@ -1172,17 +996,9 @@ in  { author =
                                                     prelude.defaults.CompilerOptions
                                                 , signatures =
                                                     [] : List Text
-                                                , static-options =
-                                                    prelude.defaults.CompilerOptions
-                                                , virtual-modules =
-                                                    [] : List Text
                                                 }
                                     
-                                    else  { asm-options =
-                                              [] : List Text
-                                          , asm-sources =
-                                              [] : List Text
-                                          , autogen-modules =
+                                    else  { autogen-modules =
                                               [] : List Text
                                           , build-depends =
                                               [] : List
@@ -1213,33 +1029,21 @@ in  { author =
                                               [ "java/Utils.java" ]
                                           , cc-options =
                                               [] : List Text
-                                          , cmm-options =
-                                              [] : List Text
-                                          , cmm-sources =
-                                              [] : List Text
                                           , compiler-options =
                                               prelude.defaults.CompilerOptions
                                           , cpp-options =
                                               [ "-DPURE_JAVA_WITH" ]
-                                          , cxx-options =
-                                              [] : List Text
-                                          , cxx-sources =
-                                              [] : List Text
                                           , default-extensions =
                                               [] : List types.Extension
                                           , default-language =
                                               [] : Optional types.Language
                                           , exposed-modules =
                                               [] : List Text
-                                          , extra-bundled-libs =
-                                              [] : List Text
                                           , extra-framework-dirs =
                                               [] : List Text
                                           , extra-ghci-libraries =
                                               [] : List Text
                                           , extra-lib-dirs =
-                                              [] : List Text
-                                          , extra-lib-flavours =
                                               [] : List Text
                                           , extra-libraries =
                                               [] : List Text
@@ -1289,18 +1093,10 @@ in  { author =
                                               prelude.defaults.CompilerOptions
                                           , signatures =
                                               [] : List Text
-                                          , static-options =
-                                              prelude.defaults.CompilerOptions
-                                          , virtual-modules =
-                                              [] : List Text
                                           }
                         
                         else  if    config.flag "wai-servlet-debug"
-                              then  { asm-options =
-                                        [] : List Text
-                                    , asm-sources =
-                                        [] : List Text
-                                    , autogen-modules =
+                              then  { autogen-modules =
                                         [] : List Text
                                     , build-depends =
                                         [] : List
@@ -1331,35 +1127,23 @@ in  { author =
                                         [] : List Text
                                     , cc-options =
                                         [] : List Text
-                                    , cmm-options =
-                                        [] : List Text
-                                    , cmm-sources =
-                                        [] : List Text
                                     , compiler-options =
                                         prelude.defaults.CompilerOptions
                                     , cpp-options =
                                         [ "-DPURE_JAVA_WITH"
                                         , "-DWAI_SERVLET_DEBUG"
                                         ]
-                                    , cxx-options =
-                                        [] : List Text
-                                    , cxx-sources =
-                                        [] : List Text
                                     , default-extensions =
                                         [] : List types.Extension
                                     , default-language =
                                         [] : Optional types.Language
                                     , exposed-modules =
                                         [] : List Text
-                                    , extra-bundled-libs =
-                                        [] : List Text
                                     , extra-framework-dirs =
                                         [] : List Text
                                     , extra-ghci-libraries =
                                         [] : List Text
                                     , extra-lib-dirs =
-                                        [] : List Text
-                                    , extra-lib-flavours =
                                         [] : List Text
                                     , extra-libraries =
                                         [] : List Text
@@ -1409,17 +1193,9 @@ in  { author =
                                         prelude.defaults.CompilerOptions
                                     , signatures =
                                         [] : List Text
-                                    , static-options =
-                                        prelude.defaults.CompilerOptions
-                                    , virtual-modules =
-                                        [] : List Text
                                     }
                         
-                        else  { asm-options =
-                                  [] : List Text
-                              , asm-sources =
-                                  [] : List Text
-                              , autogen-modules =
+                        else  { autogen-modules =
                                   [] : List Text
                               , build-depends =
                                   [] : List
@@ -1450,33 +1226,21 @@ in  { author =
                                   [] : List Text
                               , cc-options =
                                   [] : List Text
-                              , cmm-options =
-                                  [] : List Text
-                              , cmm-sources =
-                                  [] : List Text
                               , compiler-options =
                                   prelude.defaults.CompilerOptions
                               , cpp-options =
                                   [ "-DPURE_JAVA_WITH" ]
-                              , cxx-options =
-                                  [] : List Text
-                              , cxx-sources =
-                                  [] : List Text
                               , default-extensions =
                                   [] : List types.Extension
                               , default-language =
                                   [] : Optional types.Language
                               , exposed-modules =
                                   [] : List Text
-                              , extra-bundled-libs =
-                                  [] : List Text
                               , extra-framework-dirs =
                                   [] : List Text
                               , extra-ghci-libraries =
                                   [] : List Text
                               , extra-lib-dirs =
-                                  [] : List Text
-                              , extra-lib-flavours =
                                   [] : List Text
                               , extra-libraries =
                                   [] : List Text
@@ -1526,10 +1290,6 @@ in  { author =
                                   prelude.defaults.CompilerOptions
                               , signatures =
                                   [] : List Text
-                              , static-options =
-                                  prelude.defaults.CompilerOptions
-                              , virtual-modules =
-                                  [] : List Text
                               }
             
             else  if    config.impl
@@ -1539,11 +1299,7 @@ in  { author =
                           (prelude.laterVersion (prelude.v "0.0.9"))
                         )
                   then        if    config.flag "wai-servlet-debug"
-                              then  { asm-options =
-                                        [] : List Text
-                                    , asm-sources =
-                                        [] : List Text
-                                    , autogen-modules =
+                              then  { autogen-modules =
                                         [] : List Text
                                     , build-depends =
                                         [] : List
@@ -1574,33 +1330,21 @@ in  { author =
                                         [ "java/Utils.java" ]
                                     , cc-options =
                                         [] : List Text
-                                    , cmm-options =
-                                        [] : List Text
-                                    , cmm-sources =
-                                        [] : List Text
                                     , compiler-options =
                                         prelude.defaults.CompilerOptions
                                     , cpp-options =
                                         [ "-DWAI_SERVLET_DEBUG" ]
-                                    , cxx-options =
-                                        [] : List Text
-                                    , cxx-sources =
-                                        [] : List Text
                                     , default-extensions =
                                         [] : List types.Extension
                                     , default-language =
                                         [] : Optional types.Language
                                     , exposed-modules =
                                         [] : List Text
-                                    , extra-bundled-libs =
-                                        [] : List Text
                                     , extra-framework-dirs =
                                         [] : List Text
                                     , extra-ghci-libraries =
                                         [] : List Text
                                     , extra-lib-dirs =
-                                        [] : List Text
-                                    , extra-lib-flavours =
                                         [] : List Text
                                     , extra-libraries =
                                         [] : List Text
@@ -1650,17 +1394,9 @@ in  { author =
                                         prelude.defaults.CompilerOptions
                                     , signatures =
                                         [] : List Text
-                                    , static-options =
-                                        prelude.defaults.CompilerOptions
-                                    , virtual-modules =
-                                        [] : List Text
                                     }
                         
-                        else  { asm-options =
-                                  [] : List Text
-                              , asm-sources =
-                                  [] : List Text
-                              , autogen-modules =
+                        else  { autogen-modules =
                                   [] : List Text
                               , build-depends =
                                   [] : List
@@ -1691,17 +1427,9 @@ in  { author =
                                   [ "java/Utils.java" ]
                               , cc-options =
                                   [] : List Text
-                              , cmm-options =
-                                  [] : List Text
-                              , cmm-sources =
-                                  [] : List Text
                               , compiler-options =
                                   prelude.defaults.CompilerOptions
                               , cpp-options =
-                                  [] : List Text
-                              , cxx-options =
-                                  [] : List Text
-                              , cxx-sources =
                                   [] : List Text
                               , default-extensions =
                                   [] : List types.Extension
@@ -1709,15 +1437,11 @@ in  { author =
                                   [] : Optional types.Language
                               , exposed-modules =
                                   [] : List Text
-                              , extra-bundled-libs =
-                                  [] : List Text
                               , extra-framework-dirs =
                                   [] : List Text
                               , extra-ghci-libraries =
                                   [] : List Text
                               , extra-lib-dirs =
-                                  [] : List Text
-                              , extra-lib-flavours =
                                   [] : List Text
                               , extra-libraries =
                                   [] : List Text
@@ -1767,18 +1491,10 @@ in  { author =
                                   prelude.defaults.CompilerOptions
                               , signatures =
                                   [] : List Text
-                              , static-options =
-                                  prelude.defaults.CompilerOptions
-                              , virtual-modules =
-                                  [] : List Text
                               }
             
             else  if    config.flag "wai-servlet-debug"
-                  then  { asm-options =
-                            [] : List Text
-                        , asm-sources =
-                            [] : List Text
-                        , autogen-modules =
+                  then  { autogen-modules =
                             [] : List Text
                         , build-depends =
                             [] : List
@@ -1801,33 +1517,21 @@ in  { author =
                             [] : List Text
                         , cc-options =
                             [] : List Text
-                        , cmm-options =
-                            [] : List Text
-                        , cmm-sources =
-                            [] : List Text
                         , compiler-options =
                             prelude.defaults.CompilerOptions
                         , cpp-options =
                             [ "-DWAI_SERVLET_DEBUG" ]
-                        , cxx-options =
-                            [] : List Text
-                        , cxx-sources =
-                            [] : List Text
                         , default-extensions =
                             [] : List types.Extension
                         , default-language =
                             [] : Optional types.Language
                         , exposed-modules =
                             [] : List Text
-                        , extra-bundled-libs =
-                            [] : List Text
                         , extra-framework-dirs =
                             [] : List Text
                         , extra-ghci-libraries =
                             [] : List Text
                         , extra-lib-dirs =
-                            [] : List Text
-                        , extra-lib-flavours =
                             [] : List Text
                         , extra-libraries =
                             [] : List Text
@@ -1869,17 +1573,9 @@ in  { author =
                             prelude.defaults.CompilerOptions
                         , signatures =
                             [] : List Text
-                        , static-options =
-                            prelude.defaults.CompilerOptions
-                        , virtual-modules =
-                            [] : List Text
                         }
             
-            else  { asm-options =
-                      [] : List Text
-                  , asm-sources =
-                      [] : List Text
-                  , autogen-modules =
+            else  { autogen-modules =
                       [] : List Text
                   , build-depends =
                       [] : List { bounds : types.VersionRange, package : Text }
@@ -1900,17 +1596,9 @@ in  { author =
                       [] : List Text
                   , cc-options =
                       [] : List Text
-                  , cmm-options =
-                      [] : List Text
-                  , cmm-sources =
-                      [] : List Text
                   , compiler-options =
                       prelude.defaults.CompilerOptions
                   , cpp-options =
-                      [] : List Text
-                  , cxx-options =
-                      [] : List Text
-                  , cxx-sources =
                       [] : List Text
                   , default-extensions =
                       [] : List types.Extension
@@ -1918,15 +1606,11 @@ in  { author =
                       [] : Optional types.Language
                   , exposed-modules =
                       [] : List Text
-                  , extra-bundled-libs =
-                      [] : List Text
                   , extra-framework-dirs =
                       [] : List Text
                   , extra-ghci-libraries =
                       [] : List Text
                   , extra-lib-dirs =
-                      [] : List Text
-                  , extra-lib-flavours =
                       [] : List Text
                   , extra-libraries =
                       [] : List Text
@@ -1967,14 +1651,10 @@ in  { author =
                       prelude.defaults.CompilerOptions
                   , signatures =
                       [] : List Text
-                  , static-options =
-                      prelude.defaults.CompilerOptions
-                  , virtual-modules =
-                      [] : List Text
                   }
         ] : Optional (types.Config → types.Library)
     , license =
-        < AllRightsReserved =
+        < Unspecified =
             {=}
         | GPL :
             Optional types.Version
@@ -1998,12 +1678,10 @@ in  { author =
             Optional types.Version
         | PublicDomain :
             {}
-        | Unspecified :
+        | AllRightsReserved :
             {}
         | Other :
             {}
-        | SPDX :
-            types.SPDX
         >
     , license-files =
         [] : List Text

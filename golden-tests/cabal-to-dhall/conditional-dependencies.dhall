@@ -54,11 +54,7 @@ in  { author =
                                       (prelude.thisVersion (prelude.v "8.4"))
                                       (prelude.laterVersion (prelude.v "8.4"))
                                     )
-                              then  { asm-options =
-                                        [] : List Text
-                                    , asm-sources =
-                                        [] : List Text
-                                    , autogen-modules =
+                              then  { autogen-modules =
                                         [] : List Text
                                     , build-depends =
                                         [ { bounds =
@@ -99,17 +95,9 @@ in  { author =
                                         [] : List Text
                                     , cc-options =
                                         [] : List Text
-                                    , cmm-options =
-                                        [] : List Text
-                                    , cmm-sources =
-                                        [] : List Text
                                     , compiler-options =
                                         prelude.defaults.CompilerOptions
                                     , cpp-options =
-                                        [] : List Text
-                                    , cxx-options =
-                                        [] : List Text
-                                    , cxx-sources =
                                         [] : List Text
                                     , default-extensions =
                                         [] : List types.Extension
@@ -117,15 +105,11 @@ in  { author =
                                         [] : Optional types.Language
                                     , exposed-modules =
                                         [] : List Text
-                                    , extra-bundled-libs =
-                                        [] : List Text
                                     , extra-framework-dirs =
                                         [] : List Text
                                     , extra-ghci-libraries =
                                         [] : List Text
                                     , extra-lib-dirs =
-                                        [] : List Text
-                                    , extra-lib-flavours =
                                         [] : List Text
                                     , extra-libraries =
                                         [] : List Text
@@ -175,17 +159,9 @@ in  { author =
                                         prelude.defaults.CompilerOptions
                                     , signatures =
                                         [] : List Text
-                                    , static-options =
-                                        prelude.defaults.CompilerOptions
-                                    , virtual-modules =
-                                        [] : List Text
                                     }
                         
-                        else  { asm-options =
-                                  [] : List Text
-                              , asm-sources =
-                                  [] : List Text
-                              , autogen-modules =
+                        else  { autogen-modules =
                                   [] : List Text
                               , build-depends =
                                   [ { bounds =
@@ -221,17 +197,9 @@ in  { author =
                                   [] : List Text
                               , cc-options =
                                   [] : List Text
-                              , cmm-options =
-                                  [] : List Text
-                              , cmm-sources =
-                                  [] : List Text
                               , compiler-options =
                                   prelude.defaults.CompilerOptions
                               , cpp-options =
-                                  [] : List Text
-                              , cxx-options =
-                                  [] : List Text
-                              , cxx-sources =
                                   [] : List Text
                               , default-extensions =
                                   [] : List types.Extension
@@ -239,15 +207,11 @@ in  { author =
                                   [] : Optional types.Language
                               , exposed-modules =
                                   [] : List Text
-                              , extra-bundled-libs =
-                                  [] : List Text
                               , extra-framework-dirs =
                                   [] : List Text
                               , extra-ghci-libraries =
                                   [] : List Text
                               , extra-lib-dirs =
-                                  [] : List Text
-                              , extra-lib-flavours =
                                   [] : List Text
                               , extra-libraries =
                                   [] : List Text
@@ -297,10 +261,6 @@ in  { author =
                                   prelude.defaults.CompilerOptions
                               , signatures =
                                   [] : List Text
-                              , static-options =
-                                  prelude.defaults.CompilerOptions
-                              , virtual-modules =
-                                  [] : List Text
                               }
             
             else  if    config.impl
@@ -309,11 +269,7 @@ in  { author =
                           (prelude.thisVersion (prelude.v "8.4"))
                           (prelude.laterVersion (prelude.v "8.4"))
                         )
-                  then  { asm-options =
-                            [] : List Text
-                        , asm-sources =
-                            [] : List Text
-                        , autogen-modules =
+                  then  { autogen-modules =
                             [] : List Text
                         , build-depends =
                             [ { bounds = prelude.anyVersion, package = "A" }
@@ -337,17 +293,9 @@ in  { author =
                             [] : List Text
                         , cc-options =
                             [] : List Text
-                        , cmm-options =
-                            [] : List Text
-                        , cmm-sources =
-                            [] : List Text
                         , compiler-options =
                             prelude.defaults.CompilerOptions
                         , cpp-options =
-                            [] : List Text
-                        , cxx-options =
-                            [] : List Text
-                        , cxx-sources =
                             [] : List Text
                         , default-extensions =
                             [] : List types.Extension
@@ -355,15 +303,11 @@ in  { author =
                             [] : Optional types.Language
                         , exposed-modules =
                             [] : List Text
-                        , extra-bundled-libs =
-                            [] : List Text
                         , extra-framework-dirs =
                             [] : List Text
                         , extra-ghci-libraries =
                             [] : List Text
                         , extra-lib-dirs =
-                            [] : List Text
-                        , extra-lib-flavours =
                             [] : List Text
                         , extra-libraries =
                             [] : List Text
@@ -405,17 +349,9 @@ in  { author =
                             prelude.defaults.CompilerOptions
                         , signatures =
                             [] : List Text
-                        , static-options =
-                            prelude.defaults.CompilerOptions
-                        , virtual-modules =
-                            [] : List Text
                         }
             
-            else  { asm-options =
-                      [] : List Text
-                  , asm-sources =
-                      [] : List Text
-                  , autogen-modules =
+            else  { autogen-modules =
                       [] : List Text
                   , build-depends =
                       [ { bounds = prelude.anyVersion, package = "A" } ]
@@ -436,17 +372,9 @@ in  { author =
                       [] : List Text
                   , cc-options =
                       [] : List Text
-                  , cmm-options =
-                      [] : List Text
-                  , cmm-sources =
-                      [] : List Text
                   , compiler-options =
                       prelude.defaults.CompilerOptions
                   , cpp-options =
-                      [] : List Text
-                  , cxx-options =
-                      [] : List Text
-                  , cxx-sources =
                       [] : List Text
                   , default-extensions =
                       [] : List types.Extension
@@ -454,15 +382,11 @@ in  { author =
                       [] : Optional types.Language
                   , exposed-modules =
                       [] : List Text
-                  , extra-bundled-libs =
-                      [] : List Text
                   , extra-framework-dirs =
                       [] : List Text
                   , extra-ghci-libraries =
                       [] : List Text
                   , extra-lib-dirs =
-                      [] : List Text
-                  , extra-lib-flavours =
                       [] : List Text
                   , extra-libraries =
                       [] : List Text
@@ -503,10 +427,6 @@ in  { author =
                       prelude.defaults.CompilerOptions
                   , signatures =
                       [] : List Text
-                  , static-options =
-                      prelude.defaults.CompilerOptions
-                  , virtual-modules =
-                      [] : List Text
                   }
         ] : Optional (types.Config → types.Library)
     , license =
@@ -538,8 +458,6 @@ in  { author =
             {}
         | Other :
             {}
-        | SPDX :
-            types.SPDX
         >
     , license-files =
         [] : List Text

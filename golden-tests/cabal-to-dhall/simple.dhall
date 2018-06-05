@@ -1,6 +1,6 @@
     let prelude = ../../dhall/prelude.dhall 
 
-in  let types = ../../dhall/types.dhall 
+in  let types = ../../dhall/types.dhall
 
 in  { author =
         ""
@@ -43,7 +43,7 @@ in  { author =
     , library =
         [] : Optional (types.Config → types.Library)
     , license =
-        < AllRightsReserved =
+        < Unspecified =
             {=}
         | GPL :
             Optional types.Version
@@ -67,12 +67,10 @@ in  { author =
             Optional types.Version
         | PublicDomain :
             {}
-        | Unspecified :
+        | AllRightsReserved :
             {}
         | Other :
             {}
-        | SPDX :
-            types.SPDX
         >
     , license-files =
         [] : List Text
