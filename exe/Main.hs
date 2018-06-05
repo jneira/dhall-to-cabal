@@ -25,7 +25,7 @@ import Data.Version ( showVersion )
 
 import DhallLocation ( typesLocation, dhallFromGitHub )
 import DhallToCabal
-import qualified Paths_dhall_to_cabal as Paths
+import qualified Paths_dhall_to_etlas as Paths
 
 import qualified Data.HashMap.Strict.InsOrd as InsOrdHashMap
 import qualified Data.Text.Lazy.IO as LazyText
@@ -678,4 +678,4 @@ liftCSE subrecord name body expr =
 
 printVersion :: IO ()
 printVersion = do
-  putStrLn ( "dhall-to-cabal version " ++ showVersion Paths.version )
+  putStrLn ( "dhall-to-etlas version " ++ showVersion Paths.version )

@@ -19,7 +19,7 @@ import qualified System.IO
 
 import CabalToDhall ( cabalToDhall )
 import DhallLocation ( dhallFromGitHub )
-import Paths_dhall_to_cabal ( version )
+import Paths_dhall_to_etlas ( version )
 
 
 data Command
@@ -115,4 +115,4 @@ opts =
 
 printVersion :: IO ()
 printVersion = do
-  putStrLn ( "cabal-to-dhall version " ++ showVersion version )
+  putStrLn ( "etlas-to-dhall version " ++ showVersion version )
