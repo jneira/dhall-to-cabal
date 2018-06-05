@@ -1654,7 +1654,7 @@ in  { author =
                   }
         ] : Optional (types.Config → types.Library)
     , license =
-        prelude.types.Licenses.AllRightsReserved {=}
+        prelude.types.Licenses.Unspecified {=}
     , license-files =
         [] : List Text
     , maintainer =
