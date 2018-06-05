@@ -7,12 +7,12 @@ import Data.Algorithm.DiffOutput
 import Data.Function ( (&) )
 import System.FilePath ( takeBaseName, replaceExtension )
 import Test.Tasty ( defaultMain, TestTree, testGroup )
-import Test.Tasty.Golden ( findByExtension, goldenVsStringDiff )
+import Test.Tasty.Golden ( writeBinaryFile, findByExtension, goldenVsStringDiff )
 import Test.Tasty.Golden.Advanced ( goldenTest )
 
-import qualified Data.ByteString as BS
 import qualified Data.Text.Lazy.Encoding as LazyText
 import qualified Data.Text.Lazy.IO as LazyText
+import qualified Data.Text.Lazy as LazyText
 import qualified Data.Text.Prettyprint.Doc as Pretty
 import qualified Data.Text.Prettyprint.Doc.Render.Text as Pretty
 import qualified Dhall.Core
@@ -81,9 +81,6 @@ goldenTests = do
       dhallLocation = DhallLocation preludeLocation typesLocation
 
   dhallFiles <-
---    return $ map
---             (\ f -> "./golden-tests/dhall-to-cabal/" ++ f ++ ".dhall")
---             ["empty-package","dhall-to-etlas","wai-servlet"]
     findByExtension [ ".dhall" ] "golden-tests/dhall-to-cabal"
   cabalFiles <-
     findByExtension [ ".cabal" ] "golden-tests/cabal-to-dhall"
@@ -97,7 +94,7 @@ goldenTests = do
               ( LazyText.readFile dhallFile >>= dhallToCabal dhallFile  )
               ( \ ( Cabal.showGenericPackageDescription -> exp ) ( Cabal.showGenericPackageDescription -> act ) -> do
                   if exp == act then
-                      return Nothing
+                    return Nothing
                   else do
                     putStrLn $ "Diff between expected " ++ cabalFile ++
                                " and actual " ++ dhallFile ++ " :"
@@ -110,15 +107,26 @@ goldenTests = do
           , let cabalFile = replaceExtension dhallFile ".cabal"
           ]
      , testGroup "cabal-to-dhall"
-         [ goldenVsStringDiff
+         [ goldenTest
              ( takeBaseName cabalFile )
-             ( \ ref new -> [ "diff", "-u", ref, new ] )
-             dhallFile
+             ( LazyText.readFile dhallFile )
              ( LazyText.readFile cabalFile >>= cabalToDhall dhallLocation
-                 & fmap ( LazyText.encodeUtf8 . Pretty.renderLazy
+                 & fmap ( Pretty.renderLazy
                         . Pretty.layoutSmart layoutOpts . Pretty.pretty
                         )
              )
+             ( \ (LazyText.unpack -> exp) (LazyText.unpack -> act) -> do
+                let gDiff = getGroupedDiff (lines exp) (lines act)
+                let ppDiff' = ppDiff gDiff
+                if  ppDiff' == "\n" then
+                  return Nothing
+                else do
+                  putStrLn $ "Diff between expected " ++ dhallFile ++
+                             " and actual " ++ cabalFile ++ " :"
+                  putStrLn ppDiff'
+                  return $ Just "Generated .dhall file does not match input"
+              )
+              ( LazyText.writeFile dhallFile )
          | cabalFile <- cabalFiles
          , let dhallFile = replaceExtension cabalFile ".dhall"
          ]
