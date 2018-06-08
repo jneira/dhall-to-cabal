@@ -7,6 +7,7 @@
 
 module CabalToDhall
   ( cabalToDhall
+  , parseGenericPackageDescriptionThrows
   ) where
 
 import Data.Foldable ( foldMap )
@@ -20,6 +21,8 @@ import qualified Data.ByteString as ByteString
 import qualified Data.HashMap.Strict.InsOrd as Map
 import qualified Data.Sequence as Seq
 import qualified Data.Text.Lazy as LazyText
+import qualified Data.Text as Text
+import qualified Data.Text.Encoding as Text
 import qualified Data.Text.Lazy.Builder as Builder
 import qualified Dhall
 import qualified Dhall.Core
@@ -76,25 +79,31 @@ type DhallExpr =
 dhallString :: String -> Expr.Expr s a
 dhallString = Expr.TextLit . Dhall.Core.Chunks [] . Builder.fromString
 
-cabalToDhall :: DhallLocation -> LazyText.Text -> IO ( Expr.Expr Dhall.Parser.Src Dhall.Core.Import )
-cabalToDhall dhallLocation source =
-  case Cabal.parseGenericPackageDescription ( LazyText.unpack source ) of
+parseGenericPackageDescriptionThrows
+  :: ByteString.ByteString
+  -> IO Cabal.GenericPackageDescription
+parseGenericPackageDescriptionThrows source =
+  case Cabal.parseGenericPackageDescription ( Text.unpack $ Text.decodeUtf8 source ) of
     Cabal.ParseFailed e -> do
       putStrLn "Could not parse Cabal file: "
 
       error ( show e )
 
-    Cabal.ParseOk _warnings genericPackageDescription -> do
-      let
-        dhall =
-          Expr.Let "prelude" Nothing ( Expr.Embed ( preludeLocation dhallLocation ) )
-          $ Expr.Let "types" Nothing ( Expr.Embed ( typesLocation dhallLocation ) )
-          $ Dhall.TypeCheck.absurd <$>
-              Dhall.embed
-                genericPackageDescriptionToDhall
-                genericPackageDescription
+    Cabal.ParseOk _warnings genericPackageDescription ->
+      return genericPackageDescription
 
-      return dhall
+
+cabalToDhall
+  :: DhallLocation
+  -> Cabal.GenericPackageDescription
+  -> Expr.Expr Dhall.Parser.Src Dhall.Core.Import
+cabalToDhall dhallLocation genericPackageDescription =
+  Expr.Let "prelude" Nothing ( Expr.Embed ( preludeLocation dhallLocation ) )
+    $ Expr.Let "types" Nothing ( Expr.Embed ( typesLocation dhallLocation ) )
+    $ Dhall.TypeCheck.absurd <$>
+        Dhall.embed
+          genericPackageDescriptionToDhall
+          genericPackageDescription
 
 newtype RecordInputType a =
   RecordInputType

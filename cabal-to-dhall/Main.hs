@@ -8,8 +8,6 @@ import Data.Foldable ( asum )
 import Data.Version ( showVersion )
 
 import qualified Data.ByteString as ByteString
-import qualified Data.Text.Lazy as LazyText
-import qualified Data.Text.Lazy.IO as LazyText
 import qualified Data.Text.Prettyprint.Doc as Pretty
 import qualified Data.Text.Prettyprint.Doc.Render.Text as Pretty
 import qualified Data.Text.Prettyprint.Doc.Symbols.Unicode as Pretty
@@ -17,7 +15,7 @@ import qualified Dhall.Core
 import qualified Options.Applicative as OptParse
 import qualified System.IO
 
-import CabalToDhall ( cabalToDhall )
+import CabalToDhall ( cabalToDhall, parseGenericPackageDescriptionThrows )
 import DhallLocation ( dhallFromGitHub )
 import Paths_dhall_to_etlas ( version )
 
@@ -84,13 +82,13 @@ runCabalToDhall CabalToDhallOptions{ cabalFilePath } = do
   source <-
     case cabalFilePath of
       Nothing ->
-        LazyText.getContents
+        ByteString.getContents
 
       Just filePath ->
-        LazyText.readFile filePath
+        ByteString.readFile filePath
 
-  dhall <-
-    cabalToDhall dhallFromGitHub source
+  dhall <- cabalToDhall dhallFromGitHub <$>
+    parseGenericPackageDescriptionThrows source
 
   Pretty.renderIO
     System.IO.stdout

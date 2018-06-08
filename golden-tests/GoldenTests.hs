@@ -10,7 +10,7 @@ import Test.Tasty ( defaultMain, TestTree, testGroup )
 import Test.Tasty.Golden ( writeBinaryFile, findByExtension, goldenVsStringDiff )
 import Test.Tasty.Golden.Advanced ( goldenTest )
 
-import qualified Data.Text.Lazy.Encoding as LazyText
+import qualified Data.ByteString as BS
 import qualified Data.Text.Lazy.IO as LazyText
 import qualified Data.Text.Lazy as LazyText
 import qualified Data.Text.Prettyprint.Doc as Pretty
@@ -20,7 +20,7 @@ import qualified Distribution.PackageDescription.Parse as Cabal
 import qualified Distribution.PackageDescription.PrettyPrint as Cabal
 import qualified Distribution.Verbosity as Cabal
 
-import CabalToDhall ( cabalToDhall )
+import CabalToDhall ( cabalToDhall, parseGenericPackageDescriptionThrows )
 import DhallLocation ( DhallLocation ( DhallLocation ) )
 import DhallToCabal ( dhallToCabal )
 
@@ -110,9 +110,10 @@ goldenTests = do
          [ goldenTest
              ( takeBaseName cabalFile )
              ( LazyText.readFile dhallFile )
-             ( LazyText.readFile cabalFile >>= cabalToDhall dhallLocation
+             ( BS.readFile cabalFile >>= parseGenericPackageDescriptionThrows
                  & fmap ( Pretty.renderLazy
                         . Pretty.layoutSmart layoutOpts . Pretty.pretty
+                        . cabalToDhall dhallLocation
                         )
              )
              ( \ (LazyText.unpack -> exp) (LazyText.unpack -> act) -> do
