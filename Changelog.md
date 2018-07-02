@@ -30,6 +30,19 @@
   Code that only imports `prelude.dhall` and `types.dhall` is
   unaffected by this change.
 
+* `prelude.defaults.Package.license` is now `AllRightsReserved`.
+
+* `dhall-to-cabal` now maps `AllRightsReserved` to `SPDX.NONE` when
+  `cabal-version` is at least 2.2.
+
+* `cabal-to-dhall` will now generate more compact `.dhall` files by
+  using defaults.
+
+* The default `build-type` is now omission, to use Cabal 2.2's
+  inference, and the default `cabal-version` has been bumped to 2.2.
+
+* Export `prelude.types.Scopes`.
+
 ## 1.1.0.0 -- 2018-06-03
 
 ### Breaking Changes

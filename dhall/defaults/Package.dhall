@@ -12,10 +12,9 @@
 , bug-reports =
     ""
 , build-type =
-    [ (constructors ../types/BuildType.dhall ).Simple {=}
-    ] : Optional ../types/BuildType.dhall 
+    [] : Optional ../types/BuildType.dhall
 , cabal-version =
-    ../Version/v.dhall  "2.0"
+    ../Version/v.dhall  "2.2"
 , category =
     ""
 , copyright =
@@ -51,7 +50,7 @@
 , library =
     [] : Optional (../types/Guarded.dhall  ../types/Library.dhall )
 , license =
-    (constructors ../types/License.dhall ).Unspecified {=}
+    (constructors ../types/License.dhall ).AllRightsReserved {=}
 , license-files =
     [] : List Text
 , maintainer =

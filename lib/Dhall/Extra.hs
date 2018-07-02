@@ -23,7 +23,7 @@ import Data.List ( sortBy )
 import Data.Ord ( comparing )
 
 import qualified Data.HashMap.Strict.InsOrd as Map
-import qualified Data.Text.Lazy as LazyText
+import qualified Data.Text as StrictText
 import qualified Dhall
 import qualified Dhall.Core as Dhall ( Expr )
 import qualified Dhall.Core as Expr ( Expr(..) )
@@ -37,7 +37,7 @@ newtype RecordBuilder a =
     ( Product
         ( Const
             ( Map.InsOrdHashMap
-                LazyText.Text
+                StrictText.Text
                 ( Dhall.Expr Dhall.Parser.Src Dhall.TypeCheck.X )
             )
         )
@@ -66,7 +66,7 @@ makeRecord ( RecordBuilder ( Pair ( Const fields ) ( Compose extractF ) ) ) =
 
 
 
-keyValue :: LazyText.Text -> Dhall.Type a -> RecordBuilder a
+keyValue :: StrictText.Text -> Dhall.Type a -> RecordBuilder a
 keyValue key valueType =
   let
     extract expr = do
@@ -84,7 +84,7 @@ keyValue key valueType =
 
 
 
-makeUnion :: Map.InsOrdHashMap LazyText.Text ( Dhall.Type a ) -> Dhall.Type a
+makeUnion :: Map.InsOrdHashMap StrictText.Text ( Dhall.Type a ) -> Dhall.Type a
 makeUnion alts =
   let
     extract expr = do

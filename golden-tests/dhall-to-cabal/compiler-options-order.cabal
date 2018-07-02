@@ -1,10 +1,12 @@
+cabal-version: 2.2
 name: Name
 version: 1
-cabal-version: 2.0
-build-type: Simple
-license: UnspecifiedLicense
+license: NONE
 
 library
+    exposed-modules:
+        Foo
+        Bar
     
     if impl(ghc >=8.2)
         
@@ -18,8 +20,3 @@ library
             ghc-options: A C E F
         else
             ghc-options: A F
-    exposed-modules:
-        Foo
-        Bar
-
-

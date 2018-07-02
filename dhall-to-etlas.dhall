@@ -26,6 +26,8 @@ in  let pkgVer =
 in  let deps =
           { etlas-cabal =
               pkgVer "etlas-cabal" "1.3.0.0" "1.4"
+          , Diff =
+              pkgVer "Diff" "0.3.4" "0.4"
           , base =
               pkgVer "base" "4.5" "5"
           , bytestring =
@@ -33,35 +35,33 @@ in  let deps =
           , containers =
               pkgVer "containers" "0.5" "0.6"
           , dhall =
-              pkgVer "dhall" "1.14.0" "1.15"
+              pkgVer "dhall" "1.15.0" "1.16"
           , dhall-to-etlas =
               pkg "dhall-to-etlas" prelude.anyVersion
+          , filepath =
+              pkgVer "filepath" "1.4" "1.5"
+          , insert-ordered-containers =
+              pkgVer "insert-ordered-containers" "0.2.1.0" "0.3"
           , optparse-applicative =
               pkgVer "optparse-applicative" "0.13.2" "0.15"
           , prettyprinter =
               pkgVer "prettyprinter" "1.2.0.1" "1.3"
-          , text =
-              pkgVer "text" "1.2" "1.3"
-          , transformers =
-              pkgVer "transformers" "0.2.0.0" "0.6"
-          , formatting =
-              pkgVer "formatting" "6.3.1" "6.4"
-          , hashable =
-              pkgVer "hashable" "1.2.6.1" "1.3"
-          , insert-ordered-containers =
-              pkgVer "insert-ordered-containers" "0.2.1.0" "0.3"
-          , vector =
-              pkgVer "vector" "0.11.0.0" "0.13"
           , contravariant =
               pkgVer "contravariant" "1.4" "1.5"
-          , Diff =
-              pkgVer "Diff" "0.3.4" "0.4"
-          , filepath =
-              pkgVer "filepath" "1.4" "1.5"
+          , hashable =
+              pkgVer "hashable" "1.2.6.1" "1.3"
           , tasty =
               pkgVer "tasty" "0.11" "1.2"
           , tasty-golden =
               pkgVer "tasty-golden" "2.3" "2.4"
+          , text =
+              pkgVer "text" "1.2" "1.3"
+          , transformers =
+              pkgVer "transformers" "0.5.2" "0.6"
+          , formatting =
+              pkgVer "formatting" "6.3.1" "6.4"
+          , vector =
+              pkgVer "vector" "0.11.0.0" "0.13"
           , semigroups =
               pkgVer "semigroups" "0.18.0" "0.19"
           }
@@ -118,7 +118,6 @@ in    prelude.utils.GitHub-project
           , "dhall/VersionRange/thisVersion.dhall"
           , "dhall/VersionRange/unionVersionRanges.dhall"
           , "dhall/VersionRange/withinVersion.dhall"
-          , "dhall/defaults/Benchmark.dhall"
           , "dhall/defaults/Benchmark.dhall"
           , "dhall/defaults/BuildInfo.dhall"
           , "dhall/defaults/CompilerOptions.dhall"
@@ -190,7 +189,6 @@ in    prelude.utils.GitHub-project
                   , deps.containers
                   , deps.contravariant
                   , deps.dhall
-                  , deps.formatting
                   , deps.hashable
                   , deps.insert-ordered-containers
                   , deps.text
