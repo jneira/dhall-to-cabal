@@ -57,7 +57,7 @@ in  let deps =
           , text =
               pkgVer "text" "1.2" "1.3"
           , transformers =
-              pkgVer "transformers" "0.5.2" "0.6"
+              pkgVer "transformers" "0.2.0.0" "0.6"
           , formatting =
               pkgVer "formatting" "6.3.1" "6.4"
           , vector =

@@ -140,7 +140,7 @@ library
         hashable >=1.2.6.1 && <1.3,
         insert-ordered-containers >=0.2.1.0 && <0.3,
         text >=1.2 && <1.3,
-        transformers >=0.5.2 && <0.6,
+        transformers >=0.2.0.0 && <0.6,
         vector >=0.11.0.0 && <0.13,
         semigroups >=0.18.0 && <0.19
 
@@ -166,7 +166,7 @@ executable  dhall-to-etlas
         optparse-applicative >=0.13.2 && <0.15,
         prettyprinter >=1.2.0.1 && <1.3,
         text >=1.2 && <1.3,
-        transformers >=0.5.2 && <0.6
+        transformers >=0.2.0.0 && <0.6
 
 executable  etlas-to-dhall
     main-is: Main.hs
