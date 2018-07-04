@@ -1,7 +1,8 @@
-cabal-version: 2.2
+cabal-version: 1.12
+build-type: Simple
 name: Name
 version: 1
-license: NONE
+license: UnspecifiedLicense
 
 library
     build-depends:
@@ -14,5 +15,4 @@ library
     if impl(ghc >=8.4)
         build-depends:
             C -any
-    else
 

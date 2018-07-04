@@ -17,4 +17,6 @@ in    prelude.defaults.Package
                 "hello"
             }
           ]
+      , license =
+          prelude.types.Licenses.Unspecified {=}
       }

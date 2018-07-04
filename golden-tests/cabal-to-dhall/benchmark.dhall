@@ -23,4 +23,6 @@ in    prelude.defaults.Package
           ]
       , cabal-version =
           prelude.v "2.0"
+      , license =
+          prelude.types.Licenses.Unspecified {=}
       }

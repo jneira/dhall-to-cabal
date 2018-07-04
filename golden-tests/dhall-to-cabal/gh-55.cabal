@@ -1,7 +1,8 @@
-cabal-version: 2.2
+cabal-version: 1.12
+build-type: Simple               
 name: Name
 version: 1
-license: NONE
+license: UnspecifiedLicense
 
 library
     exposed-modules:
@@ -13,5 +14,4 @@ library
         cpp-options: -DCOND1
         other-modules:
             OtherModule
-    else
 

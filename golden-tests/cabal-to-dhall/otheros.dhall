@@ -18,4 +18,6 @@ in    prelude.defaults.Package
               
               else  prelude.defaults.Library ⫽ { exposed-modules = [ "A" ] }
           ] : Optional (types.Config → types.Library)
+      , license =
+          prelude.types.Licenses.Unspecified {=}
       }

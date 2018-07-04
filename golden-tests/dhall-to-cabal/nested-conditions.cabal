@@ -1,7 +1,8 @@
-cabal-version: 2.2
+cabal-version: 1.12
+build-type: Simple
 name: foo
 version: 0
-license: NONE
+license: UnspecifiedLicense
 
 library
     

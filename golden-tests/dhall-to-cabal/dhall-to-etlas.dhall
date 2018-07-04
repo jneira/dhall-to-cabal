@@ -51,8 +51,6 @@ in let deps =
                                      "0.2.1.0"  "0.3"
          , vector =
              pkgVer "vector"         "0.11.0.0" "0.13"
-         , contravariant =
-             pkgVer "contravariant"  "1.4"      "1.5"
          , Diff =
              pkgVer "Diff"           "0.3.4"    "0.4"
          , filepath =

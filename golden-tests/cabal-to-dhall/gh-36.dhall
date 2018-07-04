@@ -172,5 +172,6 @@ in    prelude.defaults.Package
               
               else  prelude.defaults.Library
           ] : Optional (types.Config → types.Library)
+      , license =
+          prelude.types.Licenses.Unspecified {=}
       }
-

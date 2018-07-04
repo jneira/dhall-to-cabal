@@ -1,6 +1,7 @@
 cabal-version: 2.2
+build-type: Simple
 name: foo
 version: 0
-license: NONE
+license: AllRightsReserved
 
 library
