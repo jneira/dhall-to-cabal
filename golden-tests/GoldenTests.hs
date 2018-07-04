@@ -7,12 +7,12 @@ import Data.Algorithm.DiffOutput
 import Data.Function ( (&) )
 import System.FilePath ( takeBaseName, replaceExtension )
 import Test.Tasty ( defaultMain, TestTree, testGroup )
-import Test.Tasty.Golden ( writeBinaryFile, findByExtension, goldenVsStringDiff )
+import Test.Tasty.Golden ( findByExtension )
 import Test.Tasty.Golden.Advanced ( goldenTest )
 
 import qualified Data.ByteString as BS
+import qualified Data.Text as StrictText
 import qualified Data.Text.IO as StrictText
-import qualified Data.Text.Lazy.Encoding as LazyText
 import qualified Data.Text.Prettyprint.Doc as Pretty
 import qualified Data.Text.Prettyprint.Doc.Render.Text as Pretty
 import qualified Dhall.Core
@@ -109,14 +109,14 @@ goldenTests = do
      , testGroup "cabal-to-dhall"
          [ goldenTest
              ( takeBaseName cabalFile )
-             ( LazyText.readFile dhallFile )
+             ( StrictText.readFile dhallFile )
              ( BS.readFile cabalFile >>= parseGenericPackageDescriptionThrows
-                 & fmap ( Pretty.renderLazy
+                 & fmap ( Pretty.renderStrict
                         . Pretty.layoutSmart layoutOpts . Pretty.pretty
                         . cabalToDhall dhallLocation
                         )
              )
-             ( \ (LazyText.unpack -> exp) (LazyText.unpack -> act) -> do
+             ( \ (StrictText.unpack -> exp) (StrictText.unpack -> act) -> do
                 let gDiff = getGroupedDiff (lines exp) (lines act)
                 let ppDiff' = ppDiff gDiff
                 if  ppDiff' == "\n" then
@@ -127,7 +127,7 @@ goldenTests = do
                   putStrLn ppDiff'
                   return $ Just "Generated .dhall file does not match input"
               )
-              ( LazyText.writeFile dhallFile )
+              ( StrictText.writeFile dhallFile )
          | cabalFile <- cabalFiles
          , let dhallFile = replaceExtension cabalFile ".dhall"
          ]
