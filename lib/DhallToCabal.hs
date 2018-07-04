@@ -118,7 +118,6 @@ packageDescription =
   --   > YOU PROBABLY DON'T WANT TO USE THIS FIELD.
   --
   -- So I guess we won't use this field.
-<<<<<<< HEAD
   <*> pure [] -- buildDepends
   <*> (Left <$> keyValue "cabal-version" version)
   <*> keyValue "build-type" ( Dhall.maybe buildType )
