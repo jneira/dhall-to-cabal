@@ -7,6 +7,8 @@ in    prelude.defaults.Package
           "test"
       , version =
           prelude.v "0"
+      , license =
+          prelude.types.Licenses.Unspecified {=}
       , source-repos =
           [   prelude.defaults.SourceRepo
             ⫽ { type =
