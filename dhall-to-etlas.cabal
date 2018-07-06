@@ -10,7 +10,7 @@ cabal-version: 1.12
 -- 'dhall-to-etlas.cabal' (this file).
 -- * * * * * * * * * * * * WARNING * * * * * * * * * * * *
 name: dhall-to-etlas
-version: 1.1.0.0
+version: 1.2.0.0
 build-type: Simple
 license: MIT
 license-file: LICENSE
@@ -212,3 +212,4 @@ test-suite golden-tests
         tasty >=0.11 && <1.2,
         tasty-golden >=2.3 && <2.4,
         text >=1.2 && <1.3
+

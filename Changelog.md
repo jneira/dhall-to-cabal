@@ -2,18 +2,25 @@
 
 ## NEXT
 
-* `os` conditions where the operating system's name was not recognised
-  (e.g., `os(multics)`) were crashing cabal-to-dhall. They now work as
-  expected.
+
+## 1.2.0.0 -- 2018-07-05
+
+### Breaking API Changes
 
 * Remove orphan `Dhall.Core.Inject` instances for `[Char]` and
   `CompilerFlavor`.
 
-* `dhall-to-cabal` and `cabal-to-dhall` now respond to `--version`.
-
 * `CabalToDhall.cabalToDhall` is now a pure function that accepts a
   `GenericPackageDescription`. A new convenience function has been
   added to `CabalToDhall`, `parseGenericPackageDescriptionThrows`.
+
+### Functional Changes
+
+* `os` conditions where the operating system's name was not recognised
+  (e.g., `os(multics)`) were crashing cabal-to-dhall. They now work as
+  expected.
+
+* `dhall-to-cabal` and `cabal-to-dhall` now respond to `--version`.
 
 * The `dhall` subdirectory has been reorganised so that things that
   are not types are not in the `types` subdirectory. Specifically,
@@ -42,6 +49,13 @@
   inference, and the default `cabal-version` has been bumped to 2.2.
 
 * Export `prelude.types.Scopes`.
+
+## Other Changes
+
+* Bump upper-bounds for `base`, `containers` and `contravariant`. This project
+  can build on GHC 8.6 (though will need `--allow-newer` for `Cabal` until this
+  is official released).
+
 
 ## 1.1.0.0 -- 2018-06-03
 

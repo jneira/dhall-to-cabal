@@ -1,6 +1,6 @@
-    let prelude = ./dhall/prelude.dhall 
+    let prelude = ./dhall/prelude.dhall
 
-in  let types = ./dhall/types.dhall 
+in  let types = ./dhall/types.dhall
 
 in  let v = prelude.v
 
@@ -176,7 +176,7 @@ in    prelude.utils.GitHub-project
       , license-files =
           [ "LICENSE" ]
       , version =
-          v "1.1.0.0"
+          v "1.2.0.0"
       , cabal-version =
           v "1.12"
       , library =
