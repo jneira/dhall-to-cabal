@@ -183,7 +183,7 @@ benchmark =
 
 
 
-buildInfo :: Dhall.Record Cabal.BuildInfo
+buildInfo :: Dhall.RecordType Cabal.BuildInfo
 buildInfo = Cabal.BuildInfo
   <$> Dhall.field "buildable" Dhall.bool
   <*> Dhall.field "build-tools"
@@ -681,7 +681,7 @@ pkgconfigName =
 
 moduleReexport :: Dhall.Type Cabal.ModuleReexport
 moduleReexport =
-  makeRecord $
+  Dhall.record $
   (\ original moduleReexportName ->
      Cabal.ModuleReexport
         { moduleReexportOriginalPackage = fst original
@@ -689,7 +689,7 @@ moduleReexport =
         , ..
         } ) <$> orig <*> Dhall.field "name" moduleName
   where orig = Dhall.field "original" $
-               makeRecord $
+               Dhall.record $
                (,) <$> Dhall.field "package" ( Dhall.maybe packageName )
                    <*> Dhall.field "name" moduleName
 
