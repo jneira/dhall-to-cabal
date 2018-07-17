@@ -34,6 +34,8 @@ in  let deps =
               pkgVer "bytestring" "0.10" "0.11"
           , containers =
               pkgVer "containers" "0.5" "0.6"
+          , directory =
+              pkgVer "directory" "1.3.0.2" "1.4"
           , dhall =
               pkgVer "dhall" "1.15.0" "1.16"
           , dhall-to-etlas =
@@ -90,6 +92,10 @@ in    prelude.utils.GitHub-project
           ''
       , category =
           "Distribution"
+      -- build-type simple is needed to allow tools compatible with cabal < 2.2 build the package
+      , build-type =
+          [ prelude.types.BuildTypes.Simple {=}
+          ] : Optional types.BuildType
       , maintainer =
           "atreyu.bbb@gmail.com"
       , author =
@@ -276,6 +282,32 @@ in    prelude.utils.GitHub-project
                     [ "Paths_dhall_to_etlas" ]
                 , default-language =
                     Haskell2010
+                }
+            )
+          , prelude.unconditional.executable
+            "dhall-to-cabal-meta"
+            (    prelude.defaults.Executable
+              ⫽ { scope =
+                    prelude.types.Scopes.Private {=}
+                , build-depends =
+                    [ deps.base
+                    , deps.directory
+                    , deps.dhall
+                    , deps.dhall-to-cabal
+                    , deps.filepath
+                    , deps.optparse-applicative
+                    , deps.prettyprinter
+                    ]
+                , hs-source-dirs =
+                    [ "meta" ]
+                , default-language =
+                    [ prelude.types.Languages.Haskell2010 {=} ] : Optional
+                                                                  types.Language
+                , compiler-options =
+                      prelude.defaults.CompilerOptions
+                    ⫽ { GHC = warning-options }
+                , main-is =
+                    "Main.hs"
                 }
             )
           ]

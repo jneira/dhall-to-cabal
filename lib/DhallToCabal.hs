@@ -81,11 +81,10 @@ import DhallToCabal.Diff ( Diffable(..)  )
 
 
 
-packageIdentifier :: RecordBuilder Cabal.PackageIdentifier
+packageIdentifier :: Dhall.RecordType Cabal.PackageIdentifier
 packageIdentifier =
-  Cabal.PackageIdentifier <$> keyValue "name" packageName
-                          <*> keyValue "version" version
-
+  Cabal.PackageIdentifier <$> Dhall.field "name" packageName
+                          <*> Dhall.field "version" version
 
 
 packageName :: Dhall.Type Cabal.PackageName
@@ -93,25 +92,25 @@ packageName = Cabal.mkPackageName <$> Dhall.string
 
 
 
-packageDescription :: RecordBuilder Cabal.PackageDescription
+packageDescription :: Dhall.RecordType Cabal.PackageDescription
 packageDescription =
   Cabal.PackageDescription
   <$> packageIdentifier
-  <*> keyValue "license" license
-  <*> keyValue "license-files" ( Dhall.list Dhall.string )
-  <*> keyValue "copyright" Dhall.string
-  <*> keyValue "maintainer" Dhall.string
-  <*> keyValue "author" Dhall.string
-  <*> keyValue "stability" Dhall.string
-  <*> keyValue "tested-with" ( Dhall.list compiler )
-  <*> keyValue "homepage" Dhall.string
-  <*> keyValue "package-url" Dhall.string
-  <*> keyValue "bug-reports" Dhall.string
-  <*> keyValue "source-repos" ( Dhall.list sourceRepo )
-  <*> keyValue "synopsis" Dhall.string
-  <*> keyValue "description" Dhall.string
-  <*> keyValue "category" Dhall.string
-  <*> keyValue "x-fields"
+  <*> Dhall.field "license" license
+  <*> Dhall.field "license-files" ( Dhall.list Dhall.string )
+  <*> Dhall.field "copyright" Dhall.string
+  <*> Dhall.field "maintainer" Dhall.string
+  <*> Dhall.field "author" Dhall.string
+  <*> Dhall.field "stability" Dhall.string
+  <*> Dhall.field "tested-with" ( Dhall.list compiler )
+  <*> Dhall.field "homepage" Dhall.string
+  <*> Dhall.field "package-url" Dhall.string
+  <*> Dhall.field "bug-reports" Dhall.string
+  <*> Dhall.field "source-repos" ( Dhall.list sourceRepo )
+  <*> Dhall.field "synopsis" Dhall.string
+  <*> Dhall.field "description" Dhall.string
+  <*> Dhall.field "category" Dhall.string
+  <*> Dhall.field "x-fields"
       ( Dhall.list ( Dhall.pair Dhall.string Dhall.string ) )
   -- Cabal documentation states
   --
@@ -119,20 +118,22 @@ packageDescription =
   --
   -- So I guess we won't use this field.
   <*> pure [] -- buildDepends
-  <*> (Left <$> keyValue "cabal-version" version)
-  <*> keyValue "build-type" ( Dhall.maybe buildType )
-  <*> keyValue "custom-setup" ( Dhall.maybe setupBuildInfo )
+  <*> (Left <$> Dhall.field "cabal-version" version)
+  <*> Dhall.field "build-type" ( Dhall.maybe buildType )
+  <*> Dhall.field "custom-setup" ( Dhall.maybe setupBuildInfo )
   <*> pure Nothing -- library
   <*> pure [] -- subLibraries
   <*> pure [] -- executables
   <*> pure [] -- foreignLibs
   <*> pure [] -- testSuites
   <*> pure [] -- benchmarks
-  <*> keyValue "data-files" ( Dhall.list Dhall.string )
-  <*> keyValue "data-dir" Dhall.string
-  <*> keyValue "extra-source-files" ( Dhall.list Dhall.string )
-  <*> keyValue "extra-tmp-files" ( Dhall.list Dhall.string )
-  <*> keyValue "extra-doc-files" ( Dhall.list Dhall.string )
+  <*> Dhall.field "data-files" ( Dhall.list Dhall.string )
+  <*> Dhall.field "data-dir" Dhall.string
+  <*> Dhall.field "extra-source-files" ( Dhall.list Dhall.string )
+  <*> Dhall.field "extra-tmp-files" ( Dhall.list Dhall.string )
+  <*> Dhall.field "extra-doc-files" ( Dhall.list Dhall.string )
+
+
 
 version :: Dhall.Type Cabal.Version
 version =
@@ -171,67 +172,68 @@ version =
 
 benchmark :: Dhall.Type Cabal.Benchmark
 benchmark =
-  makeRecord $
+  Dhall.record $
   (\ mainIs benchmarkName benchmarkBuildInfo ->
     Cabal.Benchmark
        { benchmarkInterface =
             Cabal.BenchmarkExeV10 ( Cabal.mkVersion [ 1, 0 ] ) mainIs
         , ..
-        }) <$> keyValue "main-is" Dhall.string
+        }) <$> Dhall.field "main-is" Dhall.string
            <*> pure "" <*> buildInfo
 
 
 
-buildInfo :: RecordBuilder Cabal.BuildInfo
+buildInfo :: Dhall.Record Cabal.BuildInfo
 buildInfo = Cabal.BuildInfo
-  <$> keyValue "buildable" Dhall.bool
-  <*> keyValue "build-tools"
+  <$> Dhall.field "buildable" Dhall.bool
+  <*> Dhall.field "build-tools"
       ( Dhall.list legacyExeDependency )
-  <*> keyValue "build-tool-depends"
+  <*> Dhall.field "build-tool-depends"
       ( Dhall.list exeDependency )
-  <*> keyValue "cpp-options" ( Dhall.list Dhall.string )
-  <*> keyValue "cc-options" ( Dhall.list Dhall.string )
-  <*> keyValue "ld-options" ( Dhall.list Dhall.string )
-  <*> keyValue "pkgconfig-depends"
+  <*> Dhall.field "cpp-options" ( Dhall.list Dhall.string )
+  <*> Dhall.field "cc-options" ( Dhall.list Dhall.string )
+  <*> Dhall.field "ld-options" ( Dhall.list Dhall.string )
+  <*> Dhall.field "pkgconfig-depends"
       ( Dhall.list pkgconfigDependency )
-  <*> keyValue "frameworks" ( Dhall.list Dhall.string )
-  <*> keyValue "extra-framework-dirs"
+  <*> Dhall.field "frameworks" ( Dhall.list Dhall.string )
+  <*> Dhall.field "extra-framework-dirs"
       ( Dhall.list Dhall.string )
-  <*> keyValue "c-sources" ( Dhall.list Dhall.string )
-  <*> keyValue "js-sources" ( Dhall.list Dhall.string )
-  <*> keyValue "java-sources" ( Dhall.list Dhall.string )
-  <*> keyValue "hs-source-dirs" ( Dhall.list Dhall.string )
-  <*> keyValue "other-modules" ( Dhall.list moduleName )
-  <*> keyValue "autogen-modules" ( Dhall.list moduleName )
-  <*> keyValue "default-language" ( Dhall.maybe language )
-  <*> keyValue "other-languages" ( Dhall.list language )
-  <*> keyValue "default-extensions" ( Dhall.list extension )
-  <*> keyValue "other-extensions" ( Dhall.list extension )
+  <*> Dhall.field "c-sources" ( Dhall.list Dhall.string )
+  <*> Dhall.field "js-sources" ( Dhall.list Dhall.string )
+  <*> Dhall.field "java-sources" ( Dhall.list Dhall.string )
+  <*> Dhall.field "hs-source-dirs" ( Dhall.list Dhall.string )
+  <*> Dhall.field "other-modules" ( Dhall.list moduleName )
+  <*> Dhall.field "autogen-modules" ( Dhall.list moduleName )
+  <*> Dhall.field "default-language" ( Dhall.maybe language )
+  <*> Dhall.field "other-languages" ( Dhall.list language )
+  <*> Dhall.field "default-extensions" ( Dhall.list extension )
+  <*> Dhall.field "other-extensions" ( Dhall.list extension )
   <*> pure []  -- old-extensions
-  <*> keyValue "maven-depends" ( Dhall.list Dhall.string )
-  <*> keyValue "extra-ghci-libraries"
+  <*> Dhall.field "maven-depends" ( Dhall.list Dhall.string )
+  <*> Dhall.field "extra-ghci-libraries"
       ( Dhall.list Dhall.string )
-  <*> keyValue "extra-lib-dirs" ( Dhall.list Dhall.string )
-  <*> keyValue "include-dirs" ( Dhall.list Dhall.string )
-  <*> keyValue "includes" ( Dhall.list Dhall.string )
-  <*> keyValue "install-includes" ( Dhall.list Dhall.string )
-  <*> keyValue "compiler-options" compilerOptions
-  <*> keyValue "profiling-options" compilerOptions
-  <*> keyValue "shared-options" compilerOptions
+  <*> Dhall.field "extra-lib-dirs" ( Dhall.list Dhall.string )
+  <*> Dhall.field "include-dirs" ( Dhall.list Dhall.string )
+  <*> Dhall.field "includes" ( Dhall.list Dhall.string )
+  <*> Dhall.field "install-includes" ( Dhall.list Dhall.string )
+  <*> Dhall.field "compiler-options" compilerOptions
+  <*> Dhall.field "profiling-options" compilerOptions
+  <*> Dhall.field "shared-options" compilerOptions
   <*> pure [] --  customFieldsBI
-  <*> keyValue "build-depends" ( Dhall.list dependency )
-  <*> keyValue "mixins" ( Dhall.list mixin )
+  <*> Dhall.field "build-depends" ( Dhall.list dependency )
+  <*> Dhall.field "mixins" ( Dhall.list mixin )
+
 
 
 buildInfoType :: Expr.Expr Dhall.Parser.Src Dhall.TypeCheck.X
 buildInfoType =
-  Dhall.expected ( makeRecord buildInfo )
+  Dhall.expected ( Dhall.record buildInfo )
 
 
 testSuite :: Dhall.Type Cabal.TestSuite
 testSuite =
-  makeRecord $
-  Cabal.TestSuite <$> pure "" <*> keyValue "type" testSuiteInterface
+  Dhall.record $
+  Cabal.TestSuite <$> pure "" <*> Dhall.field "type" testSuiteInterface
                   <*> buildInfo
 
 
@@ -242,11 +244,11 @@ testSuiteInterface =
     ( Map.fromList
         [ ( "exitcode-stdio"
           , Cabal.TestSuiteExeV10 ( Cabal.mkVersion [ 1, 0 ] )
-              <$> makeRecord ( keyValue "main-is" Dhall.string )
+              <$> Dhall.record ( Dhall.field "main-is" Dhall.string )
           )
         , ( "detailed"
           , Cabal.TestSuiteLibV09 ( Cabal.mkVersion [ 0, 9 ] )
-              <$> makeRecord ( keyValue "module" moduleName )
+              <$> Dhall.record ( Dhall.field "module" moduleName )
           )
         ]
     )
@@ -261,24 +263,24 @@ unqualComponentName =
 
 executable :: Dhall.Type Cabal.Executable
 executable =
-  makeRecord $
+  Dhall.record $
   Cabal.Executable <$> pure "" -- exeName
-                   <*> keyValue "main-is" Dhall.string
+                   <*> Dhall.field "main-is" Dhall.string
                    <*> buildInfo
 
 
 
 foreignLib :: Dhall.Type Cabal.ForeignLib
 foreignLib =
-  makeRecord $
+  Dhall.record $
   Cabal.ForeignLib <$> pure "" -- foreignLibName
-                   <*> keyValue "type" foreignLibType
-                   <*> keyValue "options" ( Dhall.list foreignLibOption )
+                   <*> Dhall.field "type" foreignLibType
+                   <*> Dhall.field "options" ( Dhall.list foreignLibOption )
                    <*> buildInfo
-                   <*> keyValue "lib-version-info"
+                   <*> Dhall.field "lib-version-info"
                        ( Dhall.maybe versionInfo )
-                   <*> keyValue "lib-version-linux" ( Dhall.maybe version )
-                   <*> keyValue "mod-def-files" ( Dhall.list Dhall.string )
+                   <*> Dhall.field "lib-version-linux" ( Dhall.maybe version )
+                   <*> Dhall.field "mod-def-files" ( Dhall.list Dhall.string )
 
 
 
@@ -295,13 +297,13 @@ foreignLibType =
 
 library :: Dhall.Type Cabal.Library
 library =
-  makeRecord $
+  Dhall.record $
     Cabal.Library <$> pure Nothing -- libName
-                  <*> keyValue "exposed-modules"
+                  <*> Dhall.field "exposed-modules"
                       ( Dhall.list moduleName )
-                  <*> keyValue "reexported-modules"
+                  <*> Dhall.field "reexported-modules"
                       ( Dhall.list moduleReexport )
-                  <*> keyValue "signatures" ( Dhall.list moduleName )
+                  <*> Dhall.field "signatures" ( Dhall.list moduleName )
                   <*> pure True -- libExposed
                   <*> buildInfo
 
@@ -309,15 +311,16 @@ library =
 
 sourceRepo :: Dhall.Type Cabal.SourceRepo
 sourceRepo =
-  makeRecord $
-  Cabal.SourceRepo <$> keyValue "kind" repoKind
-                   <*> keyValue "type" ( Dhall.maybe repoType )
-                   <*> keyValue "location" ( Dhall.maybe Dhall.string )
-                   <*> keyValue "module" ( Dhall.maybe Dhall.string )
-                   <*> keyValue "branch" ( Dhall.maybe Dhall.string )
-                   <*> keyValue "tag" ( Dhall.maybe Dhall.string )
-                   <*> keyValue "commit" ( Dhall.maybe Dhall.string )
-                   <*> keyValue "subdir" ( Dhall.maybe filePath )
+  Dhall.record $
+  Cabal.SourceRepo <$> Dhall.field "kind" repoKind
+                   <*> Dhall.field "type" ( Dhall.maybe repoType )
+                   <*> Dhall.field "location" ( Dhall.maybe Dhall.string )
+                   <*> Dhall.field "module" ( Dhall.maybe Dhall.string )
+                   <*> Dhall.field "branch" ( Dhall.maybe Dhall.string )
+                   <*> Dhall.field "tag" ( Dhall.maybe Dhall.string )
+                   <*> Dhall.field "commit" ( Dhall.maybe Dhall.string )
+                   <*> Dhall.field "subdir" ( Dhall.maybe filePath )
+
 
 
 repoKind :: Dhall.Type Cabal.RepoKind
@@ -328,9 +331,9 @@ repoKind =
 
 dependency :: Dhall.Type Cabal.Dependency
 dependency =
-  makeRecord $
-  Cabal.Dependency <$> keyValue "package" packageName
-                   <*> keyValue "bounds" versionRange
+  Dhall.record $
+  Cabal.Dependency <$> Dhall.field "package" packageName
+                   <*> Dhall.field "bounds" versionRange
 
 
 
@@ -596,10 +599,10 @@ spdxLicenseExceptionId = Dhall.genericAuto
 
 compiler :: Dhall.Type ( Cabal.CompilerFlavor, Cabal.VersionRange )
 compiler =
-  makeRecord $
+  Dhall.record $
     (,)
-      <$> keyValue "compiler" compilerFlavor
-      <*> keyValue "version" versionRange
+      <$> Dhall.field "compiler" compilerFlavor
+      <*> Dhall.field "version" versionRange
 
 
 
@@ -617,27 +620,27 @@ repoType =
 
 legacyExeDependency :: Dhall.Type Cabal.LegacyExeDependency
 legacyExeDependency =
-  makeRecord $
-  Cabal.LegacyExeDependency <$> keyValue "exe" Dhall.string
-                            <*> keyValue "version" versionRange
+  Dhall.record $
+  Cabal.LegacyExeDependency <$> Dhall.field "exe" Dhall.string
+                            <*> Dhall.field "version" versionRange
 
 
 
 compilerOptions :: Dhall.Type [ ( Cabal.CompilerFlavor, [ String ] ) ]
 compilerOptions =
-  makeRecord $
+  Dhall.record $
     sequenceA
-      [ (,) <$> pure Cabal.GHC <*> keyValue "GHC" options
-      , (,) <$> pure Cabal.GHCJS <*> keyValue "GHCJS" options
-      , (,) <$> pure Cabal.NHC <*> keyValue "NHC" options
-      , (,) <$> pure Cabal.YHC <*> keyValue "YHC" options
-      , (,) <$> pure Cabal.Hugs <*> keyValue "Hugs" options
-      , (,) <$> pure Cabal.HBC <*> keyValue "HBC" options
-      , (,) <$> pure Cabal.Helium <*> keyValue "Helium" options
-      , (,) <$> pure Cabal.JHC <*> keyValue "JHC" options
-      , (,) <$> pure Cabal.LHC <*> keyValue "LHC" options
-      , (,) <$> pure Cabal.UHC <*> keyValue "UHC" options
-      , (,) <$> pure Cabal.Eta <*> keyValue "Eta" options
+      [ (,) <$> pure Cabal.GHC <*> Dhall.field "GHC" options
+      , (,) <$> pure Cabal.GHCJS <*> Dhall.field "GHCJS" options
+      , (,) <$> pure Cabal.NHC <*> Dhall.field "NHC" options
+      , (,) <$> pure Cabal.YHC <*> Dhall.field "YHC" options
+      , (,) <$> pure Cabal.Hugs <*> Dhall.field "Hugs" options
+      , (,) <$> pure Cabal.HBC <*> Dhall.field "HBC" options
+      , (,) <$> pure Cabal.Helium <*> Dhall.field "Helium" options
+      , (,) <$> pure Cabal.JHC <*> Dhall.field "JHC" options
+      , (,) <$> pure Cabal.LHC <*> Dhall.field "LHC" options
+      , (,) <$> pure Cabal.UHC <*> Dhall.field "UHC" options
+      , (,) <$> pure Cabal.Eta <*> Dhall.field "Eta" options
       ]
 
   where
@@ -649,10 +652,10 @@ compilerOptions =
 
 exeDependency :: Dhall.Type Cabal.ExeDependency
 exeDependency = 
-  makeRecord $
-  Cabal.ExeDependency <$> keyValue "package" packageName
-                      <*> keyValue "component" unqualComponentName
-                      <*> keyValue "version" versionRange
+  Dhall.record $
+  Cabal.ExeDependency <$> Dhall.field "package" packageName
+                      <*> Dhall.field "component" unqualComponentName
+                      <*> Dhall.field "version" versionRange
 
 
 
@@ -664,9 +667,9 @@ language =
 
 pkgconfigDependency :: Dhall.Type Cabal.PkgconfigDependency
 pkgconfigDependency =
-  makeRecord $
-  Cabal.PkgconfigDependency <$> keyValue "name" pkgconfigName
-                            <*> keyValue "version" versionRange
+  Dhall.record $
+  Cabal.PkgconfigDependency <$> Dhall.field "name" pkgconfigName
+                            <*> Dhall.field "version" versionRange
 
 
 
@@ -684,11 +687,11 @@ moduleReexport =
         { moduleReexportOriginalPackage = fst original
         , moduleReexportOriginalName = snd original
         , ..
-        } ) <$> orig <*> keyValue "name" moduleName
-  where orig = keyValue "original" $
+        } ) <$> orig <*> Dhall.field "name" moduleName
+  where orig = Dhall.field "original" $
                makeRecord $
-               (,) <$> keyValue "package" ( Dhall.maybe packageName )
-                   <*> keyValue "name" moduleName
+               (,) <$> Dhall.field "package" ( Dhall.maybe packageName )
+                   <*> Dhall.field "name" moduleName
 
 
 
@@ -702,12 +705,12 @@ foreignLibOption =
 
 versionInfo :: Dhall.Type Cabal.LibVersionInfo
 versionInfo =
-  makeRecord $
+  Dhall.record $
   fmap Cabal.mkLibVersionInfo $
     (,,)
-      <$> ( fromIntegral <$> keyValue "current" Dhall.natural )
-      <*> ( fromIntegral <$> keyValue "revision" Dhall.natural )
-      <*> ( fromIntegral <$> keyValue "age" Dhall.natural )
+      <$> ( fromIntegral <$> Dhall.field "current" Dhall.natural )
+      <*> ( fromIntegral <$> Dhall.field "revision" Dhall.natural )
+      <*> ( fromIntegral <$> Dhall.field "age" Dhall.natural )
 
 
 
@@ -938,23 +941,23 @@ genericPackageDescription =
   let
     namedList k t =
       Dhall.list
-        ( makeRecord
+        ( Dhall.record
             ( (,)
-                <$> keyValue "name" unqualComponentName
-                <*> keyValue k ( guarded t )
+                <$> Dhall.field "name" unqualComponentName
+                <*> Dhall.field k ( guarded t )
             )
         )
 
   in
-    makeRecord $ Cabal.GenericPackageDescription
+    Dhall.record $ Cabal.GenericPackageDescription
       <$> packageDescription
-      <*> keyValue "flags" ( Dhall.list flag )
-      <*> keyValue "library" ( Dhall.maybe ( guarded library ) )
-      <*> keyValue "sub-libraries" ( namedList "library" library )
-      <*> keyValue "foreign-libraries" ( namedList "foreign-lib" foreignLib )
-      <*> keyValue "executables" ( namedList "executable" executable )
-      <*> keyValue "test-suites" ( namedList "test-suite" testSuite )
-      <*> keyValue "benchmarks" ( namedList "benchmark" benchmark )
+      <*> Dhall.field "flags" ( Dhall.list flag )
+      <*> Dhall.field "library" ( Dhall.maybe ( guarded library ) )
+      <*> Dhall.field "sub-libraries" ( namedList "library" library )
+      <*> Dhall.field "foreign-libraries" ( namedList "foreign-lib" foreignLib )
+      <*> Dhall.field "executables" ( namedList "executable" executable )
+      <*> Dhall.field "test-suites" ( namedList "test-suite" testSuite )
+      <*> Dhall.field "benchmarks" ( namedList "benchmark" benchmark )
 
 
 
@@ -971,11 +974,11 @@ arch =
 
 
 flag :: Dhall.Type Cabal.Flag
-flag = makeRecord $
-       Cabal.MkFlag <$> keyValue "name" flagName
-                    <*> keyValue "description" Dhall.string
-                    <*> keyValue "default" Dhall.bool
-                    <*> keyValue "manual" Dhall.bool
+flag = Dhall.record $
+       Cabal.MkFlag <$> Dhall.field "name" flagName
+                    <*> Dhall.field "description" Dhall.string
+                    <*> Dhall.field "default" Dhall.bool
+                    <*> Dhall.field "manual" Dhall.bool
 
 
 
@@ -987,8 +990,8 @@ flagName =
 
 setupBuildInfo :: Dhall.Type Cabal.SetupBuildInfo
 setupBuildInfo =
-  makeRecord $
-  Cabal.SetupBuildInfo <$> keyValue "setup-depends" ( Dhall.list dependency )
+  Dhall.record $
+  Cabal.SetupBuildInfo <$> Dhall.field "setup-depends" ( Dhall.list dependency )
                        <*> pure False
 
 
@@ -1001,24 +1004,25 @@ filePath =
 
 mixin :: Dhall.Type Cabal.Mixin
 mixin =
-  makeRecord $ Cabal.Mixin <$> keyValue "package" packageName
-                           <*> keyValue "renaming" includeRenaming
+  Dhall.record $ Cabal.Mixin <$> Dhall.field "package" packageName
+                             <*> Dhall.field "renaming" includeRenaming
 
 
 
 includeRenaming :: Dhall.Type Cabal.IncludeRenaming
 includeRenaming =
-  makeRecord $
-  Cabal.IncludeRenaming <$> keyValue "provides" moduleRenaming
-                        <*> keyValue "requires" moduleRenaming
+  Dhall.record $
+  Cabal.IncludeRenaming <$> Dhall.field "provides" moduleRenaming
+                        <*> Dhall.field "requires" moduleRenaming
+
 
 
 moduleRenaming :: Dhall.Type Cabal.ModuleRenaming
 moduleRenaming =
   fmap Cabal.ModuleRenaming $
   Dhall.list $
-  makeRecord $
-    (,) <$> keyValue "rename" moduleName <*> keyValue "to" moduleName
+  Dhall.record $
+    (,) <$> Dhall.field "rename" moduleName <*> Dhall.field "to" moduleName
 
 
 sortType :: Dhall.Type a -> Dhall.Type a
