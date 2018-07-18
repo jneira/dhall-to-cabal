@@ -250,8 +250,6 @@ in    prelude.utils.GitHub-project
                     [ prelude.types.Extensions.NamedFieldPuns True ]
                 , other-modules =
                     [ "Paths_dhall_to_cabal" ]
-                , autogen-modules =
-                    [ "Paths_dhall_to_cabal" ]
                 , default-language =
                     Haskell2010
                 }
@@ -278,8 +276,6 @@ in    prelude.utils.GitHub-project
                     [ prelude.types.Extensions.NamedFieldPuns True ]
                 , other-modules =
                     [ "Paths_dhall_to_etlas" ]
-                , autogen-modules =
-                    [ "Paths_dhall_to_etlas" ]
                 , default-language =
                     Haskell2010
                 }
@@ -287,13 +283,11 @@ in    prelude.utils.GitHub-project
           , prelude.unconditional.executable
             "dhall-to-cabal-meta"
             (    prelude.defaults.Executable
-              ⫽ { scope =
-                    prelude.types.Scopes.Private {=}
-                , build-depends =
+              ⫽ { build-depends =
                     [ deps.base
                     , deps.directory
                     , deps.dhall
-                    , deps.dhall-to-cabal
+                    , deps.dhall-to-etlas
                     , deps.filepath
                     , deps.optparse-applicative
                     , deps.prettyprinter
@@ -301,8 +295,7 @@ in    prelude.utils.GitHub-project
                 , hs-source-dirs =
                     [ "meta" ]
                 , default-language =
-                    [ prelude.types.Languages.Haskell2010 {=} ] : Optional
-                                                                  types.Language
+                    Haskell2010
                 , compiler-options =
                       prelude.defaults.CompilerOptions
                     ⫽ { GHC = warning-options }
