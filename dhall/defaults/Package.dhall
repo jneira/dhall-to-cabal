@@ -16,9 +16,10 @@ in  { author =
     , bug-reports =
         ""
     , build-type =
-        [] : Optional types.BuildType
+        [ (constructors ../types/BuildType.dhall ).Simple {=}
+        ] : Optional ../types/BuildType.dhall
     , cabal-version =
-        ./../Version/v.dhall "2.2"
+        ./../Version/v.dhall "1.12"
     , category =
         ""
     , copyright =
@@ -54,7 +55,7 @@ in  { author =
     , library =
         [] : Optional (∀(config : types.Config) → types.Library)
     , license =
-        (constructors types.License).AllRightsReserved {=}
+        (constructors ../types/License.dhall ).Unspecified {=}
     , license-files =
         [] : List Text
     , maintainer =
