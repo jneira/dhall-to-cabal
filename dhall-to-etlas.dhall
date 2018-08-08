@@ -37,13 +37,15 @@ in  let deps =
           , directory =
               pkgVer "directory" "1.3.0.2" "1.4"
           , dhall =
-              pkgVer "dhall" "1.15.0" "1.16"
+              pkgVer "dhall" "1.16.0" "1.17"
           , dhall-to-etlas =
               pkg "dhall-to-etlas" prelude.anyVersion
           , filepath =
               pkgVer "filepath" "1.4" "1.5"
           , insert-ordered-containers =
               pkgVer "insert-ordered-containers" "0.2.1.0" "0.3"
+          , microlens =
+              pkgVer "microlens" "0.1.0.0" "0.5"
           , optparse-applicative =
               pkgVer "optparse-applicative" "0.13.2" "0.15"
           , prettyprinter =
@@ -94,8 +96,7 @@ in    prelude.utils.GitHub-project
           "Distribution"
       -- build-type simple is needed to allow tools compatible with cabal < 2.2 build the package
       , build-type =
-          [ prelude.types.BuildTypes.Simple {=}
-          ] : Optional types.BuildType
+          [ prelude.types.BuildTypes.Simple {=} ] : Optional types.BuildType
       , maintainer =
           "atreyu.bbb@gmail.com"
       , author =
@@ -182,7 +183,7 @@ in    prelude.utils.GitHub-project
       , license-files =
           [ "LICENSE" ]
       , version =
-          v "1.2.0.0"
+          v "1.3.0.0"
       , cabal-version =
           v "1.12"
       , library =
@@ -234,7 +235,9 @@ in    prelude.utils.GitHub-project
                     , deps.base
                     , deps.dhall
                     , deps.dhall-to-etlas
+                    , deps.filepath
                     , deps.insert-ordered-containers
+                    , deps.microlens
                     , deps.optparse-applicative
                     , deps.prettyprinter
                     , deps.text
@@ -297,8 +300,7 @@ in    prelude.utils.GitHub-project
                 , default-language =
                     Haskell2010
                 , compiler-options =
-                      prelude.defaults.CompilerOptions
-                    ⫽ { GHC = warning-options }
+                    prelude.defaults.CompilerOptions ⫽ { GHC = warning-options }
                 , main-is =
                     "Main.hs"
                 }
@@ -316,6 +318,7 @@ in    prelude.utils.GitHub-project
                     , deps.dhall
                     , deps.dhall-to-etlas
                     , deps.filepath
+                    , deps.microlens
                     , deps.prettyprinter
                     , deps.tasty
                     , deps.tasty-golden
