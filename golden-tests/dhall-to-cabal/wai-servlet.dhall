@@ -140,6 +140,6 @@ in  updateRepo
                           else  [] : List Text
                         )
                   }
-            ] : Optional (./dhall/types/Guarded.dhall  types.Library)
+            ] : Optional (../../dhall/types/Guarded.dhall  types.Library)
         }
     )
