@@ -25,7 +25,7 @@ in  let pkgVer =
 
 in  let deps =
           { etlas-cabal =
-              pkgVer "etlas-cabal" "1.3.0.0" "1.4"
+              pkg "etlas-cabal" prelude.anyVersion
           , Diff =
               pkgVer "Diff" "0.3.4" "0.4"
           , base =

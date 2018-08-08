@@ -131,7 +131,7 @@ library
                  -fno-warn-missing-local-sigs -fno-warn-monomorphism-restriction
                  -fno-warn-name-shadowing
     build-depends:
-        etlas-cabal >=1.3.0.0 && <1.4,
+        etlas-cabal -any,
         base >=4.5 && <5,
         bytestring >=0.10 && <1,
         containers >=0.5 && <0.6,
@@ -159,7 +159,7 @@ executable  dhall-to-etlas
                  -fno-warn-missing-local-sigs -fno-warn-monomorphism-restriction
                  -fno-warn-name-shadowing
     build-depends:
-        etlas-cabal >=1.3.0.0 && <1.4,
+        etlas-cabal -any,
         base >=4.5 && <5,
         dhall >=1.16.0 && <1.17,
         dhall-to-etlas -any,
@@ -221,7 +221,7 @@ test-suite golden-tests
                  -fno-warn-name-shadowing
     build-depends:
         base >=4.5 && <5,
-        etlas-cabal >=1.3.0.0 && <1.4,
+        etlas-cabal -any,
         Diff >=0.3.4 && <0.4,
         bytestring >=0.10 && <0.11,
         dhall >=1.16.0 && <1.17,
