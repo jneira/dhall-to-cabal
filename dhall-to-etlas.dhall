@@ -284,7 +284,7 @@ in    prelude.utils.GitHub-project
                 }
             )
           , prelude.unconditional.executable
-            "dhall-to-cabal-meta"
+            "dhall-to-etlas-meta"
             (    prelude.defaults.Executable
               ⫽ { build-depends =
                     [ deps.base
