@@ -6,7 +6,9 @@ extra-deps:
   commit: d485d3c9435571119667a47a40688a0145ebb2c3
   subdirs:
   - etlas-cabal
-- dhall-1.16.1
+# - dhall-1.16.1
+- git: https://github.com/eta-lang/dhall-haskell.git
+  commit: afb6315dd3ad075d0a3681e449298a9da3c5e073
 - ansi-terminal-0.7.1.1
 - ansi-wl-pprint-0.6.8.2
 - cryptonite-0.24
@@ -30,3 +32,5 @@ extra-deps:
 - th-abstraction-0.2.6.0
 - hashable-1.2.7.0
 - Diff-0.3.4
+- cborg-0.2.0.0
+- serialise-0.2.0.0
