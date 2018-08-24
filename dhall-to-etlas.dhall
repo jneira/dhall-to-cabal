@@ -137,6 +137,7 @@ in    prelude.utils.GitHub-project
           , "dhall/types.dhall"
           , "dhall/types/Arch.dhall"
           , "dhall/types/Benchmark.dhall"
+          , "dhall/types/BuildInfo.dhall"
           , "dhall/types/BuildType.dhall"
           , "dhall/types/Compiler.dhall"
           , "dhall/types/CompilerOptions.dhall"
@@ -183,7 +184,7 @@ in    prelude.utils.GitHub-project
       , license-files =
           [ "LICENSE" ]
       , version =
-          v "1.3.0.0"
+          v "1.3.0.1"
       , cabal-version =
           v "1.12"
       , library =
