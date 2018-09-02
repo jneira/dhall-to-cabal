@@ -38,3 +38,4 @@ extra-deps:
   subdirs:
     - cborg
     - serialise
+- tasty-hunit-0.10.0.1

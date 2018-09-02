@@ -50,4 +50,6 @@ in    prelude.defaults.Package
                     ]
                 }
           ] : Optional (types.Config → types.Library)
+      , license =
+          prelude.types.Licenses.Unspecified {=}
       }

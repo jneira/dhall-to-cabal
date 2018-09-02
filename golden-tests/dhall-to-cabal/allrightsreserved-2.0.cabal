@@ -1,5 +1,6 @@
 cabal-version: 2.0
 build-type: Simple
+build-type: Simple
 name: foo
 version: 0
 license: AllRightsReserved
