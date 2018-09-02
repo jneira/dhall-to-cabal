@@ -37,7 +37,7 @@ in  let deps =
           , directory =
               pkgVer "directory" "1.3.0.2" "1.4"
           , dhall =
-              pkgVer "dhall" "1.16.0" "1.17"
+              pkgVer "dhall" "1.17.0" "1.18"
           , dhall-to-etlas =
               pkg "dhall-to-etlas" prelude.anyVersion
           , filepath =
@@ -58,6 +58,8 @@ in  let deps =
               pkgVer "tasty" "0.11" "1.2"
           , tasty-golden =
               pkgVer "tasty-golden" "2.3" "2.4"
+          , tasty-hunit =
+              pkgVer "tasty-hunit" "0.10.0.1" "0.11"
           , text =
               pkgVer "text" "1.2" "1.3"
           , transformers =
@@ -334,6 +336,31 @@ in    prelude.utils.GitHub-project
                     { main-is = "GoldenTests.hs" }
                 , default-language =
                     Haskell2010
+                }
+            )
+          , prelude.unconditional.test-suite
+            "unit-tests"
+            (   prelude.defaults.TestSuite
+              ⫽ { build-depends =
+                    [ deps.base
+                    , deps.Cabal
+                    , deps.dhall
+                    , deps.dhall-to-cabal
+                    , deps.tasty
+                    , deps.tasty-hunit
+                    , deps.text
+                    ]
+                , compiler-options =
+                    prelude.defaults.CompilerOptions ⫽ { GHC = warning-options }
+                , hs-source-dirs =
+                    [ "tests" ]
+                , type =
+                    prelude.types.TestTypes.exitcode-stdio
+                    { main-is = "Tests.hs" }
+                , default-language =
+                    Haskell2010
+                , other-modules =
+                    [ "DhallToCabal.Tests" ]
                 }
             )
           ]

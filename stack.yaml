@@ -3,11 +3,11 @@ packages:
   - .
 extra-deps:
 # - etlas-1.5.0.0
-- git: https://github.com/typelead/etlas.git
+- github: typelead/etlas
   commit: a97e19d640166510126c0d8e539b0d8f5b05535d
   subdirs:
   - etlas-cabal
-- dhall-1.17.0
+- dhall-1.17.0@rev:0
 - ansi-terminal-0.7.1.1
 - ansi-wl-pprint-0.6.8.2
 - cryptonite-0.24
@@ -32,5 +32,9 @@ extra-deps:
 - th-abstraction-0.2.6.0
 - hashable-1.2.7.0
 - Diff-0.3.4
-- cborg-0.2.0.0
-- serialise-0.2.0.0
+# Version 0.2.0.0 of cborg, the latest on Hackage, is broken on i386.
+- github: well-typed/cborg
+  commit: master
+  subdirs:
+    - cborg
+    - serialise
