@@ -35,7 +35,7 @@ in  let deps =
           , containers =
               pkgVer "containers" "0.5" "0.6"
           , directory =
-              pkgVer "directory" "1.3.0.2" "1.4"
+              pkgVer "directory" "1.2.7.1" "1.4"
           , dhall =
               pkgVer "dhall" "1.17.0" "1.18"
           , dhall-to-etlas =
