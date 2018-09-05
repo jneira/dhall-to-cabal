@@ -4,10 +4,9 @@ cabal-version: 1.12
 --
 -- Do not edit it by hand, because your changes will be over-written!
 --
--- Instead, edit the source Dhall file (which may have the
--- '.dhall' extension) and re-run dhall-to-cabal, passing the
--- source file's name as its argument and redirecting output to
--- 'dhall-to-etlas.cabal' (this file).
+-- Instead, edit the source Dhall file, namely
+-- 'dhall-to-cabal.dhall', and re-generate this file by running
+-- 'dhall-to-cabal -- dhall-to-cabal.dhall > dhall-to-cabal.cabal'.
 -- * * * * * * * * * * * * WARNING * * * * * * * * * * * *
 name: dhall-to-etlas
 version: 1.3.0.1
@@ -122,11 +121,6 @@ library
     default-language: Haskell2010
     other-extensions: GADTs GeneralizedNewtypeDeriving LambdaCase
                       OverloadedStrings RecordWildCards
-    hs-source-dirs: lib
-    other-modules:
-        DhallToCabal.ConfigTree
-        DhallToCabal.Diff
-        Dhall.Extra
     ghc-options: -Wall -fno-warn-safe -fno-warn-unsafe
                  -fno-warn-implicit-prelude -fno-warn-missing-import-lists
                  -fno-warn-missing-local-sigs -fno-warn-monomorphism-restriction
