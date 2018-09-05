@@ -363,5 +363,31 @@ in    prelude.utils.GitHub-project
                     [ "DhallToCabal.Tests" ]
                 }
             )
+          , prelude.unconditional.test-suite
+            "unit-tests"
+            (   prelude.defaults.TestSuite
+              ⫽ { build-depends =
+                    [ deps.base
+                    , deps.Cabal
+                    , deps.dhall
+                    , deps.dhall-to-cabal
+                    , deps.tasty
+                    , deps.tasty-hunit
+                    , deps.text
+                    ]
+                , compiler-options =
+                    prelude.defaults.CompilerOptions ⫽ { GHC = warning-options }
+                , hs-source-dirs =
+                    [ "tests" ]
+                , type =
+                    prelude.types.TestTypes.exitcode-stdio
+                    { main-is = "Tests.hs" }
+                , default-language =
+                    [ prelude.types.Languages.Haskell2010 {=} ] : Optional
+                                                                  types.Language
+                , other-modules =
+                    [ "DhallToCabal.Tests" ]
+                }
+            )
           ]
       }
